@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/txtLocationStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location service not started"
+        android:textSize="14px"/>
+
+    <Button
+        android:id="@+id/btnStartLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Service"
+        android:onClick="startLocationService"/>
+    <Button
+        android:id="@+id/btnStopLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop Service"
+        android:onClick="stopLocationService"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan QR Code"
+        android:textSize="14px"/>
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="183dp"
+        android:layout_height="75dp"
+        android:text="Scan QRCode"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="571dp"
+        android:onClick="clickToScanQRCode"
+        tools:ignore="MissingConstraints" />
+
+</LinearLayout>
