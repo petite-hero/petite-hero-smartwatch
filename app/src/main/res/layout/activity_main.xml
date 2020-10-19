@@ -31,13 +31,20 @@
         android:text="Scan QR Code"
         android:textSize="14px"/>
     <Button
-        android:id="@+id/button2"
-        android:layout_width="183dp"
-        android:layout_height="75dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Scan QRCode"
-        tools:layout_editor_absoluteX="114dp"
-        tools:layout_editor_absoluteY="571dp"
-        android:onClick="clickToScanQRCode"
-        tools:ignore="MissingConstraints" />
+        android:onClick="clickToScanQRCode" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Noti token"
+        android:textSize="14px"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Token"
+        android:onClick="clickToLogToken" />
 
 </LinearLayout>

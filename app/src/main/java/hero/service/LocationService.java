@@ -20,6 +20,7 @@ import hero.api.UriBuilder;
 public class LocationService extends Service implements DataCallback {
 
     public static boolean isRunning = false;
+    public static boolean isEmergency = false;
 
     protected LocationManager locationManager;
     LocationListener locationListenerGps = new LocationListener() {
@@ -31,45 +32,45 @@ public class LocationService extends Service implements DataCallback {
 //                        .put("latitude", Double.toString(location.getLatitude()))
 //                        .put("longitude", Double.toString(location.getLongitude()))
 //                        .put("time", new java.util.Date().getTime());
-                locationJsonObj.put("child", 5)  // test
+                locationJsonObj.put("child", 3)  // test
                         .put("latitude", location.getLatitude())
                         .put("longitude", location.getLongitude())
-                        .put("status", "1")
+                        .put("status", true)
                         .put("time", new java.util.Date().getTime());
                 Log.d("hulk", "gps updated");
             } catch (JSONException e){
                 e.printStackTrace();
             }
-            new POSTRequestSender(UriBuilder.getLocationUri()+"/current-location", locationJsonObj.toString(), null).execute();
+            new POSTRequestSender(UriBuilder.getUri()+"/location/current-location/"+!isEmergency, locationJsonObj.toString(), null).execute();
         }
         public void onProviderDisabled(String provider) {}
         public void onProviderEnabled(String provider) {}
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
-    LocationListener locationListenerNetwork = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            if (!isRunning) stopSelf();
-            JSONObject locationJsonObj = new JSONObject();
-            try {
-//                locationJsonObj.put("provider", "network")
-//                        .put("latitude", Double.toString(location.getLatitude()))
-//                        .put("longitude", Double.toString(location.getLongitude()));
-                locationJsonObj.put("child", 7)  // test
-                        .put("latitude", location.getLatitude())
-                        .put("longitude", location.getLongitude())
-                        .put("status", "1")
-                        .put("time", new java.util.Date().getTime());
-                Log.d("hulk", "network updated");
-//                Log.d("hulk", locationJsonObj.toString());
-            } catch (JSONException e){
-                e.printStackTrace();
-            }
-            new POSTRequestSender(UriBuilder.getLocationUri()+"/addNewLocation", locationJsonObj.toString(), LocationService.this).execute();
-        }
-        public void onProviderDisabled(String provider) {}
-        public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-    };
+//    LocationListener locationListenerNetwork = new LocationListener() {
+//        public void onLocationChanged(Location location) {
+//            if (!isRunning) stopSelf();
+//            JSONObject locationJsonObj = new JSONObject();
+//            try {
+////                locationJsonObj.put("provider", "network")
+////                        .put("latitude", Double.toString(location.getLatitude()))
+////                        .put("longitude", Double.toString(location.getLongitude()));
+//                locationJsonObj.put("child", 7)  // test
+//                        .put("latitude", location.getLatitude())
+//                        .put("longitude", location.getLongitude())
+//                        .put("status", "1")
+//                        .put("time", new java.util.Date().getTime());
+//                Log.d("hulk", "network updated");
+////                Log.d("hulk", locationJsonObj.toString());
+//            } catch (JSONException e){
+//                e.printStackTrace();
+//            }
+//            new POSTRequestSender(UriBuilder.getLocationUri()+"/addNewLocation", locationJsonObj.toString(), LocationService.this).execute();
+//        }
+//        public void onProviderDisabled(String provider) {}
+//        public void onProviderEnabled(String provider) {}
+//        public void onStatusChanged(String provider, int status, Bundle extras) {}
+//    };
 
     @Override
     public void onCreate() {
@@ -80,7 +81,7 @@ public class LocationService extends Service implements DataCallback {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locationListenerGps);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListenerGps);
         } catch (SecurityException e){
             e.printStackTrace();
         }
@@ -101,7 +102,7 @@ public class LocationService extends Service implements DataCallback {
     @Override
     public void onDestroy() {
         locationManager.removeUpdates(locationListenerGps);
-        locationManager.removeUpdates(locationListenerNetwork);
+//        locationManager.removeUpdates(locationListenerNetwork);
         isRunning = false;
     }
 
