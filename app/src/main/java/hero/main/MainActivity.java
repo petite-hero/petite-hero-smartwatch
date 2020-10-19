@@ -20,6 +20,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class MainActivity extends Activity implements DataCallback{
 
     TextView txtLocationStatus;
+    FCMService fcmService = new FCMService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,9 @@ public class MainActivity extends Activity implements DataCallback{
     }
 
     public void clickToLogToken(View view) {
-        Log.d("token", FCMService.token);
+//        Log.d("token", FCMService.token);
+        fcmService.getDeviceToken();
+        System.out.println("===> Token: " + FCMService.token);
     }
 
     @Override
