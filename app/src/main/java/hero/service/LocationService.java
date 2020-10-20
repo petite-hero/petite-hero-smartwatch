@@ -22,6 +22,11 @@ public class LocationService extends Service implements DataCallback {
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
 
+    private static boolean isSafe(Location location){
+        if (location.getLatitude() >= 10.8474 || location.getLongitude() <= 106.8026) return false;
+        return true;
+    }
+
     protected LocationManager locationManager;
     LocationListener locationListenerGps = new LocationListener() {
         public void onLocationChanged(Location location) {
@@ -41,7 +46,8 @@ public class LocationService extends Service implements DataCallback {
             } catch (JSONException e){
                 e.printStackTrace();
             }
-            new POSTRequestSender(UriBuilder.getUri()+"/location/current-location/"+!isEmergency, locationJsonObj.toString(), null).execute();
+            Log.d("hulk", isEmergency ? "true" : "false");
+            new POSTRequestSender(UriBuilder.getUri()+"/location/current-location/"+isEmergency, locationJsonObj.toString(), null).execute();
         }
         public void onProviderDisabled(String provider) {}
         public void onProviderEnabled(String provider) {}
