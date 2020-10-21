@@ -15,12 +15,14 @@ import org.json.JSONObject;
 
 import hero.api.DataCallback;
 import hero.api.POSTRequestSender;
-import hero.api.UriBuilder;
 
 public class LocationService extends Service implements DataCallback {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
+    public static String childId;
+    public static int interval;
+    public static String ipPort;
 
     private static boolean isSafe(Location location){
         if (location.getLatitude() >= 10.8474 || location.getLongitude() <= 106.8026) return false;
@@ -33,21 +35,17 @@ public class LocationService extends Service implements DataCallback {
             if (!isRunning) stopSelf();
             JSONObject locationJsonObj = new JSONObject();
             try {
-//                locationJsonObj.put("provider", "gps")
-//                        .put("latitude", Double.toString(location.getLatitude()))
-//                        .put("longitude", Double.toString(location.getLongitude()))
-//                        .put("time", new java.util.Date().getTime());
-                locationJsonObj.put("child", 3)  // test
-                        .put("latitude", location.getLatitude())
-                        .put("longitude", location.getLongitude())
-                        .put("status", true)
-                        .put("time", new java.util.Date().getTime());
-                Log.d("hulk", "gps updated");
+                locationJsonObj.put("child", childId)  // test
+                    .put("latitude", location.getLatitude())
+                    .put("longitude", location.getLongitude())
+                    // .put("provider", "gps")
+                    .put("status", isSafe(location))
+                    .put("time", new java.util.Date().getTime());
+                Log.d("test", "gps updated");
             } catch (JSONException e){
                 e.printStackTrace();
             }
-            Log.d("hulk", isEmergency ? "true" : "false");
-            new POSTRequestSender(UriBuilder.getUri()+"/location/current-location/"+isEmergency, locationJsonObj.toString(), null).execute();
+            new POSTRequestSender(ipPort+"/location/current-location/"+isEmergency, locationJsonObj.toString(), LocationService.this).execute();
         }
         public void onProviderDisabled(String provider) {}
         public void onProviderEnabled(String provider) {}
@@ -87,7 +85,7 @@ public class LocationService extends Service implements DataCallback {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListenerGps);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListenerGps);
         } catch (SecurityException e){
             e.printStackTrace();
         }
@@ -114,6 +112,6 @@ public class LocationService extends Service implements DataCallback {
 
     @Override
     public void onDataReceiving(JSONObject data) throws Exception {
-//        Log.d("hulk", data.toString());
+        Log.d("test", "Request response | Location service: " + data.toString());
     }
 }

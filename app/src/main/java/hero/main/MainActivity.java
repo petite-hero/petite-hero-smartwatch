@@ -1,52 +1,48 @@
 package hero.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONObject;
-
-import hero.api.DataCallback;
-import hero.service.FCMService;
-import hero.service.LocationService;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class MainActivity extends Activity implements DataCallback{
+public class MainActivity extends Activity{
 
-    TextView txtLocationStatus;
-    FCMService fcmService = new FCMService();
+    Button btnScanQR;
+    TextView txtChildId;
+    SharedPreferences ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnScanQR = findViewById(R.id.btnScanQR);
+        txtChildId = findViewById(R.id.txtChildId);
+        ref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        txtLocationStatus = findViewById(R.id.txtLocationStatus);
+        btnScanQR.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DeveloperActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        txtChildId.setText("Child ID: " + ref.getString("child_id", null));
 
     }
 
-    public void startLocationService(View view){
-        if (!LocationService.isRunning) {
-            Intent locationIntent = new Intent(this, LocationService.class);
-            startService(locationIntent);
-        }
-        LocationService.isRunning = true;
-        txtLocationStatus.setText("Location service started");
-    }
-
-    public void stopLocationService(View view){
-        LocationService.isRunning = false;
-        txtLocationStatus.setText("Location service stopping requested. Wait 5 secs");
-    }
-
-    public void clickToScanQRCode(View view) {
+    public void scanQRCode(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Scan");
@@ -56,29 +52,16 @@ public class MainActivity extends Activity implements DataCallback{
         integrator.initiateScan();
     }
 
-    public void clickToLogToken(View view) {
-//        Log.d("token", FCMService.token);
-        fcmService.getDeviceToken();
-        System.out.println("===> Token: " + FCMService.token);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            String scannedCode = result.getContents();
+            if (scannedCode == null) scannedCode = "Scanning cancelled";
+            Toast.makeText(this, "Scanned ID: " + scannedCode, Toast.LENGTH_LONG).show();
+            Log.d("test", "Scanned ID: " + scannedCode);
         }
-    }
-
-    @Override
-    public void onDataReceiving(JSONObject data) throws Exception {
-
     }
 
 }

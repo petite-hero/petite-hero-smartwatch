@@ -6,45 +6,17 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/txtLocationStatus"
+        android:id="@+id/txtChildId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Location service not started"
-        android:textSize="14px"/>
-
+        android:text="Child ID: none"
+        android:textSize="16px"
+        android:textAlignment="center"/>
     <Button
-        android:id="@+id/btnStartLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Service"
-        android:onClick="startLocationService"/>
-    <Button
-        android:id="@+id/btnStopLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Service"
-        android:onClick="stopLocationService"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Scan QR Code"
-        android:textSize="14px"/>
-    <Button
+        android:id="@+id/btnScanQR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Scan QRCode"
-        android:onClick="clickToScanQRCode" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Noti token"
-        android:textSize="14px"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Get Token"
-        android:onClick="clickToLogToken" />
+        android:onClick="scanQRCode" />
 
 </LinearLayout>

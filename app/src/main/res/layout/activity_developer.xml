@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DeveloperActivity" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Developer Screen"
+                android:textSize="18px"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set Child ID:"
+                android:textSize="16px"/>
+            <EditText
+                android:id="@+id/edtChildId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16px"
+                android:inputType="number"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:onClick="setChildId"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set Default Config"
+                android:onClick="setDefaultConfig"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scan IP"
+                android:onClick="scanServerIP"/>
+
+            <TextView
+                android:id="@+id/txtLocationStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location service not started"
+                android:textSize="16px"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Location"
+                android:onClick="startLocationService"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stop Location"
+                android:onClick="stopLocationService"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send Safe"
+                android:onClick="sendLocationWithStatus"
+                android:tag="safe"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send Unsafe"
+                android:onClick="sendLocationWithStatus"
+                android:tag="unsafe"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Noti token"
+                android:textSize="16px"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Device Token"
+                android:onClick="logToken" />
+
+            <TextView
+                android:id="@+id/txtConfigInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16px"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
