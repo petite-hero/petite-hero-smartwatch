@@ -1,5 +1,6 @@
 package hero.main;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -58,9 +59,18 @@ public class MainActivity extends Activity{
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             String scannedCode = result.getContents();
-            if (scannedCode == null) scannedCode = "Scanning cancelled";
-            Toast.makeText(this, "Scanned ID: " + scannedCode, Toast.LENGTH_LONG).show();
-            Log.d("test", "Scanned ID: " + scannedCode);
+            if (scannedCode != null) {
+                SharedPreferences.Editor refEditor = ref.edit();
+                refEditor.putString("child_id", scannedCode);
+                refEditor.apply();
+                txtChildId.setText("Child ID: " + ref.getString("child_id", null));
+                new AlertDialog.Builder(this)
+                    .setMessage("Child ID set as " + ref.getString("child_id", null))
+                    .setPositiveButton("OK", null)
+                    .show();
+                Toast.makeText(this, "Scanned ID: " + scannedCode, Toast.LENGTH_LONG).show();
+                Log.d("test", "Scanned ID: " + scannedCode);
+            }
         }
     }
 

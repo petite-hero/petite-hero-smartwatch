@@ -38,10 +38,10 @@ public class LocationService extends Service implements DataCallback {
                 locationJsonObj.put("child", childId)  // test
                     .put("latitude", location.getLatitude())
                     .put("longitude", location.getLongitude())
-                    // .put("provider", "gps")
+                    .put("provider", "gps")
                     .put("status", isSafe(location))
                     .put("time", new java.util.Date().getTime());
-                Log.d("test", "gps updated");
+                Log.d("test", "gps updated, emergency: " + isEmergency);
             } catch (JSONException e){
                 e.printStackTrace();
             }

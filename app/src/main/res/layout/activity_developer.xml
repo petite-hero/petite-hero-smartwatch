@@ -26,19 +26,23 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Set Child ID:"
+                android:text="Set Child ID or IP:"
                 android:textSize="16px"/>
             <EditText
                 android:id="@+id/edtChildId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16px"
-                android:inputType="number"/>
+                android:textSize="16px"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Set"
+                android:text="Set Child ID"
                 android:onClick="setChildId"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set IP"
+                android:onClick="setIP"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

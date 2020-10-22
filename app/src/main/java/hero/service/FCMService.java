@@ -25,6 +25,7 @@ public class FCMService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Log.d("test", "message received");
         // implement what needs to do when message arrived
         if (remoteMessage.getNotification() == null) {
             if (remoteMessage.getData().get("title").equals("emergency")) LocationService.isEmergency = true;
@@ -46,7 +47,7 @@ public class FCMService extends FirebaseMessagingService {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
-                            Log.w("FCM", "Fetching FCM registration token failed", task.getException());
+                            Log.d("test", "Fetching FCM registration token failed", task.getException());
                             return;
                         } else {
                             // Get new FCM registration token
@@ -55,7 +56,7 @@ public class FCMService extends FirebaseMessagingService {
                     }
                 });
         } catch (Exception e) {
-            System.out.println("===> Error at FCMService: " + e.toString());
+            Log.d("test", "===> Error at FCMService: " + e.toString());
             e.printStackTrace();
         }
     }

@@ -30,7 +30,7 @@ public class DeveloperActivity extends Activity implements DataCallback {
     FCMService fcmService;
 
     private static final String CHILD_ID = "3";
-    private static final String IP_PORT = "http://192.168.1.69:8080";
+    private static final String IP_PORT = "http://192.168.1.45:8080";
     private static final int INTERVAL = 5000;
 
 
@@ -49,8 +49,18 @@ public class DeveloperActivity extends Activity implements DataCallback {
         fetchConfig();
 
         // test
-        setDefaultConfig(null);
+//        setDefaultConfig(null);
 
+    }
+
+    // ------------------- CONFIG SETTING -------------------
+
+    public void setIP(View view){
+        SharedPreferences.Editor refEditor = ref.edit();
+        refEditor.putString("ip_port", "http://" + edtChildId.getText().toString() + ":8080");
+        refEditor.apply();
+        Toast.makeText(this, "IP set as " + ref.getString("ip_port", null), Toast.LENGTH_LONG).show();
+        fetchConfig();
     }
 
     public void setChildId(View view){
@@ -79,6 +89,8 @@ public class DeveloperActivity extends Activity implements DataCallback {
         refEditor.apply();
     }
 
+    // ------------------- LOCATION ACTIONS -------------------
+
     public void startLocationService(View view){
         if (!LocationService.isRunning) {
             LocationService.childId = ref.getString("child_id", null);
@@ -100,16 +112,19 @@ public class DeveloperActivity extends Activity implements DataCallback {
         JSONObject locationJsonObj = new JSONObject();
         try {
             locationJsonObj.put("child", ref.getString("child_id", null))
-                    .put("latitude", 10.8414846)
-                    .put("longitude", 106.8100464)
-                    .put("status", view.getTag().toString().equals("safe"))
-                    .put("time", new java.util.Date().getTime());
+                .put("latitude", 10.8414846)
+                .put("longitude", 106.8100464)
+                .put("provider", "test")
+                .put("status", view.getTag().toString().equals("safe"))
+                .put("time", new java.util.Date().getTime());
             Log.d("hulk", view.getTag().toString()+" location sent");
         } catch (JSONException e){
             e.printStackTrace();
         }
         new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/false", locationJsonObj.toString(), this).execute();
     }
+
+    // ------------------- CONFIG DISPLAY -------------------
 
     public void logToken(View view) {
         fcmService.getDeviceToken();
@@ -120,12 +135,14 @@ public class DeveloperActivity extends Activity implements DataCallback {
     private void fetchConfig(){
         String config =
             "Application configs: " +
-            "\nChild Id: " + ref.getString("child_id", null) +
-            "\nIP & Port: " + ref.getString("ip_port", null) +
-            "\nInterval: " + ref.getInt("report_interval", 0) +
-            "\nToken: " + fcmService.token;
+            "\n- Child Id: " + ref.getString("child_id", null) +
+            "\n- IP & Port: " + ref.getString("ip_port", null) +
+            "\n- Interval: " + ref.getInt("report_interval", 0) +
+            "\n- Token: " + fcmService.token;
         txtConfigInfo.setText(config);
     }
+
+    // ------------------- CALLBACK FUNCTIONS -------------------
 
     @Override
     public void onDataReceiving(JSONObject data) throws Exception {
@@ -138,10 +155,14 @@ public class DeveloperActivity extends Activity implements DataCallback {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             String scannedCode = result.getContents();
-            if (scannedCode == null) scannedCode = "Scanning cancelled";
-            Toast.makeText(this, "Scanned IP: " + scannedCode, Toast.LENGTH_LONG).show();
-            Log.d("test", "Scanned IP: " + scannedCode);
-            fetchConfig();
+            if (scannedCode != null) {
+                SharedPreferences.Editor refEditor = ref.edit();
+                refEditor.putString("ip_port", "http://" + scannedCode + ":8000");
+                refEditor.apply();
+                Toast.makeText(this, "Scanned IP: " + scannedCode, Toast.LENGTH_LONG).show();
+                Log.d("test", "Scanned IP: " + scannedCode);
+                fetchConfig();
+            }
         }
     }
 
