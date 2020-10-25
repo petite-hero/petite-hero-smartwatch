@@ -3,11 +3,13 @@ package hero.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -20,12 +22,11 @@ public class LocationService extends Service implements DataCallback {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
-    public static String childId;
-    public static int interval;
-    public static String ipPort;
+    SharedPreferences ref;
 
     private static boolean isSafe(Location location){
-        if (location.getLatitude() >= 10.8474 || location.getLongitude() <= 106.8026) return false;
+//        if (location.getLatitude() >= 10.8474 || location.getLongitude() <= 106.8026) return false;
+        if (location.getLatitude() <= 10.8355) return false;
         return true;
     }
 
@@ -35,7 +36,7 @@ public class LocationService extends Service implements DataCallback {
             if (!isRunning) stopSelf();
             JSONObject locationJsonObj = new JSONObject();
             try {
-                locationJsonObj.put("child", childId)  // test
+                locationJsonObj.put("child", ref.getString("child_id", null))  // test
                     .put("latitude", location.getLatitude())
                     .put("longitude", location.getLongitude())
                     .put("provider", "gps")
@@ -45,7 +46,9 @@ public class LocationService extends Service implements DataCallback {
             } catch (JSONException e){
                 e.printStackTrace();
             }
-            new POSTRequestSender(ipPort+"/location/current-location/"+isEmergency, locationJsonObj.toString(), LocationService.this).execute();
+//            Log.d("test", ref.getString("ip_port", null)+"/location/current-location/"+isEmergency);
+//            new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(), LocationService.this).execute();
+            new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/true", locationJsonObj.toString(), LocationService.this).execute();
         }
         public void onProviderDisabled(String provider) {}
         public void onProviderEnabled(String provider) {}
@@ -80,12 +83,13 @@ public class LocationService extends Service implements DataCallback {
     public void onCreate() {
         super.onCreate();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ref = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, interval, 0, locationListenerGps);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, ref.getInt("report_interval", 0), 0, locationListenerGps);
         } catch (SecurityException e){
             e.printStackTrace();
         }

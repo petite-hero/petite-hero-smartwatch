@@ -82,6 +82,11 @@
                 android:text="Send Unsafe"
                 android:onClick="sendLocationWithStatus"
                 android:tag="unsafe"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Safe Zones"
+                android:onClick="getSafeZones"/>
 
             <TextView
                 android:layout_width="match_parent"

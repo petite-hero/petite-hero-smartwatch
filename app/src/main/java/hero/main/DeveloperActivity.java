@@ -15,12 +15,15 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import hero.api.DataCallback;
+import hero.api.GETRequestSender;
 import hero.api.POSTRequestSender;
 import hero.service.FCMService;
 import hero.service.LocationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 public class DeveloperActivity extends Activity implements DataCallback {
 
@@ -30,7 +33,7 @@ public class DeveloperActivity extends Activity implements DataCallback {
     FCMService fcmService;
 
     private static final String CHILD_ID = "3";
-    private static final String IP_PORT = "http://192.168.1.45:8080";
+    private static final String IP_PORT = "http://10.1.148.205:8080";
     private static final int INTERVAL = 5000;
 
 
@@ -93,9 +96,6 @@ public class DeveloperActivity extends Activity implements DataCallback {
 
     public void startLocationService(View view){
         if (!LocationService.isRunning) {
-            LocationService.childId = ref.getString("child_id", null);
-            LocationService.interval = ref.getInt("report_interval", 0);
-            LocationService.ipPort = ref.getString("ip_port", null);
             Intent locationIntent = new Intent(this, LocationService.class);
             startService(locationIntent);
         }
@@ -117,11 +117,27 @@ public class DeveloperActivity extends Activity implements DataCallback {
                 .put("provider", "test")
                 .put("status", view.getTag().toString().equals("safe"))
                 .put("time", new java.util.Date().getTime());
-            Log.d("hulk", view.getTag().toString()+" location sent");
+            Log.d("test", view.getTag().toString()+" location sent");
         } catch (JSONException e){
             e.printStackTrace();
         }
         new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/false", locationJsonObj.toString(), this).execute();
+    }
+
+    public void getSafeZones(View view){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, -12);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        new GETRequestSender(ref.getString("ip_port", null) + "/location/list/" + ref.getString("child_id", null) + "/" + calendar.getTimeInMillis(),
+                new DataCallback() {
+                    @Override
+                    public void onDataReceiving(JSONObject data) throws Exception {
+                        Log.d("test", data.toString());
+                    }
+                }
+        ).execute();
     }
 
     // ------------------- CONFIG DISPLAY -------------------
@@ -157,7 +173,7 @@ public class DeveloperActivity extends Activity implements DataCallback {
             String scannedCode = result.getContents();
             if (scannedCode != null) {
                 SharedPreferences.Editor refEditor = ref.edit();
-                refEditor.putString("ip_port", "http://" + scannedCode + ":8000");
+                refEditor.putString("ip_port", "http://" + scannedCode + ":8080");
                 refEditor.apply();
                 Toast.makeText(this, "Scanned IP: " + scannedCode, Toast.LENGTH_LONG).show();
                 Log.d("test", "Scanned IP: " + scannedCode);
