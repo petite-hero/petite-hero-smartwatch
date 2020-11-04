@@ -15,69 +15,73 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import hero.api.DataCallback;
 import hero.api.POSTRequestSender;
 
-public class LocationService extends Service implements DataCallback {
+public class LocationService extends Service {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
     SharedPreferences ref;
 
-    private static boolean isSafe(Location location){
-//        if (location.getLatitude() >= 10.8474 || location.getLongitude() <= 106.8026) return false;
-        if (location.getLatitude() <= 10.8355) return false;
-        return true;
-    }
+//    private static boolean isSafe(Location location){
+//        if (location.getLatitude() <= 10.8355) return false;
+//        return true;
+//    }
 
     protected LocationManager locationManager;
     LocationListener locationListenerGps = new LocationListener() {
         public void onLocationChanged(Location location) {
-            if (!isRunning) stopSelf();
-            JSONObject locationJsonObj = new JSONObject();
-            try {
-                locationJsonObj.put("child", ref.getString("child_id", null))  // test
-                    .put("latitude", location.getLatitude())
-                    .put("longitude", location.getLongitude())
-                    .put("provider", "gps")
-                    .put("status", isSafe(location))
-                    .put("time", new java.util.Date().getTime());
-                Log.d("test", "gps updated, emergency: " + isEmergency);
-            } catch (JSONException e){
-                e.printStackTrace();
+            if (!isRunning){
+                stopSelf();
+                return;
             }
-//            Log.d("test", ref.getString("ip_port", null)+"/location/current-location/"+isEmergency);
-//            new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(), LocationService.this).execute();
-            new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/true", locationJsonObj.toString(), LocationService.this).execute();
+            handleLocationChanged(location, "gps");
         }
         public void onProviderDisabled(String provider) {}
         public void onProviderEnabled(String provider) {}
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
-//    LocationListener locationListenerNetwork = new LocationListener() {
-//        public void onLocationChanged(Location location) {
-//            if (!isRunning) stopSelf();
-//            JSONObject locationJsonObj = new JSONObject();
-//            try {
-////                locationJsonObj.put("provider", "network")
-////                        .put("latitude", Double.toString(location.getLatitude()))
-////                        .put("longitude", Double.toString(location.getLongitude()));
-//                locationJsonObj.put("child", 7)  // test
-//                        .put("latitude", location.getLatitude())
-//                        .put("longitude", location.getLongitude())
-//                        .put("status", "1")
-//                        .put("time", new java.util.Date().getTime());
-//                Log.d("hulk", "network updated");
-////                Log.d("hulk", locationJsonObj.toString());
-//            } catch (JSONException e){
-//                e.printStackTrace();
-//            }
-//            new POSTRequestSender(UriBuilder.getLocationUri()+"/addNewLocation", locationJsonObj.toString(), LocationService.this).execute();
-//        }
-//        public void onProviderDisabled(String provider) {}
-//        public void onProviderEnabled(String provider) {}
-//        public void onStatusChanged(String provider, int status, Bundle extras) {}
-//    };
+    LocationListener locationListenerNetwork = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            if (!isRunning){
+                stopSelf();
+                return;
+            }
+            handleLocationChanged(location, "network");
+        }
+        public void onProviderDisabled(String provider) {}
+        public void onProviderEnabled(String provider) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    };
+
+    private void handleLocationChanged(Location location, String provider){
+        JSONObject locationJsonObj = new JSONObject();
+        try {
+            Calendar calendarNow = Calendar.getInstance();
+            locationJsonObj.put("child", ref.getString("child_id", null))
+                    .put("latitude", location.getLatitude())
+                    .put("longitude", location.getLongitude())
+                    .put("provider", provider)
+                    .put("status", hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow))
+                    .put("time", calendarNow.getTimeInMillis());
+//            Log.d("test", "gps updated, emergency: " + isEmergency);
+            Log.d("test", "gps updated, status: " + hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow));
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(),
+//        new POSTRequestSender(ref.getString("ip_port", null) + "/location/current-location/true", locationJsonObj.toString(),
+            new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    Log.d("test", "Request response | Location service: " + data.toString());
+                }
+            }
+        ).execute();
+    }
 
     @Override
     public void onCreate() {
@@ -94,7 +98,7 @@ public class LocationService extends Service implements DataCallback {
             e.printStackTrace();
         }
 //        try{
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 20000, 0, locationListenerNetwork);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, ref.getInt("report_interval", 0), 0, locationListenerNetwork);
 //        } catch (SecurityException e){
 //            e.printStackTrace();
 //        }
@@ -114,8 +118,4 @@ public class LocationService extends Service implements DataCallback {
         isRunning = false;
     }
 
-    @Override
-    public void onDataReceiving(JSONObject data) throws Exception {
-        Log.d("test", "Request response | Location service: " + data.toString());
-    }
 }

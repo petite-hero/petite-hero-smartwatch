@@ -1,5 +1,6 @@
 package hero.service;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,20 +25,36 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+
         super.onMessageReceived(remoteMessage);
-        Log.d("test", "message received");
-        // implement what needs to do when message arrived
+
+        // SILENT NOTI LISTENER
         if (remoteMessage.getNotification() == null) {
+
+            // turning on/off emergency mode
             if (remoteMessage.getData().get("title").equals("emergency")) LocationService.isEmergency = true;
             if (remoteMessage.getData().get("title").equals("stop_emergency")) LocationService.isEmergency = false;
-            Log.d("test", "emergency changed to " + LocationService.isEmergency);
+
+            // turning on/off location reporting
+            if (remoteMessage.getData().get("title").equals("active")){
+                if (!LocationService.isRunning) {
+                    Intent locationIntent = new Intent(this, LocationService.class);
+                    startService(locationIntent);
+                }
+                LocationService.isRunning = true;
+            }
+            if (remoteMessage.getData().get("title").equals("inactive")) LocationService.isRunning = false;
+
             Log.d("test", "====> Here is title from Data: " + remoteMessage.getData().get("title"));
             Log.d("test", "====> Here is body from Data: " + remoteMessage.getData().get("body"));
+
+        // NORMAL NOTI LISTENER
         } else {
             // ignore it for now
             Log.d("test", "====> Here is title from Notification: " + remoteMessage.getNotification().getTitle());
             Log.d("test", "====> Here is body from Notification: " + remoteMessage.getNotification().getBody());
         }
+
     }
 
     public void getDeviceToken() {

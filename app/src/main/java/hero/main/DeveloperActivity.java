@@ -17,15 +17,21 @@ import com.google.zxing.integration.android.IntentResult;
 import hero.api.DataCallback;
 import hero.api.GETRequestSender;
 import hero.api.POSTRequestSender;
+import hero.api.PUTRequestSender;
 import hero.service.FCMService;
 import hero.service.LocationService;
+import hero.util.Location;
+import hero.util.LocationDTO;
+import hero.util.Util;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DeveloperActivity extends Activity implements DataCallback {
+public class DeveloperActivity extends Activity {
 
     EditText edtChildId;
     TextView txtLocationStatus, txtConfigInfo;
@@ -33,7 +39,7 @@ public class DeveloperActivity extends Activity implements DataCallback {
     FCMService fcmService;
 
     private static final String CHILD_ID = "3";
-    private static final String IP_PORT = "http://10.1.148.205:8080";
+    private static final String IP_PORT = "http://192.168.100.166:8080";
     private static final int INTERVAL = 5000;
 
 
@@ -52,7 +58,7 @@ public class DeveloperActivity extends Activity implements DataCallback {
         fetchConfig();
 
         // test
-//        setDefaultConfig(null);
+        setDefaultConfig(null);
 
     }
 
@@ -121,22 +127,43 @@ public class DeveloperActivity extends Activity implements DataCallback {
         } catch (JSONException e){
             e.printStackTrace();
         }
-        new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/false", locationJsonObj.toString(), this).execute();
+        new POSTRequestSender(ref.getString("ip_port", null) + "/location/current-location/false", locationJsonObj.toString(),
+            new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    Log.d("test", "Sent location with status | Response: " + data.toString());
+                }
+            }
+        ).execute();
     }
 
     public void getSafeZones(View view){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, -12);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        new GETRequestSender(ref.getString("ip_port", null) + "/location/list/" + ref.getString("child_id", null) + "/" + calendar.getTimeInMillis(),
-                new DataCallback() {
-                    @Override
-                    public void onDataReceiving(JSONObject data) throws Exception {
-                        Log.d("test", data.toString());
+        new GETRequestSender(ref.getString("ip_port", null) + "/location/list/" +
+                                 ref.getString("child_id", null) + "/"+
+                                 Util.getLongHour0(),
+            new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    Log.d("test", data.toString());
+                    JSONArray fetchedData = data.getJSONArray("data");
+                    List<LocationDTO> locList = new ArrayList<>();
+                    for (int i = 0; i < fetchedData.length(); i++){
+                        JSONObject loc = fetchedData.getJSONObject(i);
+                        LocationDTO newLoc = new LocationDTO(
+                            loc.getLong("safezoneId"),
+                            loc.getString("name"),
+                            loc.getDouble("latitude"),
+                            loc.getDouble("longitude"),
+                            loc.getInt("radius"),
+                            Util.timeStrToCalendar(loc.getString("fromTime")),
+                            Util.timeStrToCalendar(loc.getString("toTime")),
+                            loc.getString("type")
+                        );
+                        locList.add(newLoc);
                     }
+                    Location.locList = locList;
                 }
+            }
         ).execute();
     }
 
@@ -146,6 +173,15 @@ public class DeveloperActivity extends Activity implements DataCallback {
         fcmService.getDeviceToken();
         Log.d("test", "Device token: " + FCMService.token);
         fetchConfig();
+        // put device token to server
+        JSONObject tokenJsonObj = new JSONObject();
+        try {
+            tokenJsonObj.put("childId", ref.getString("child_id", null))
+                        .put("pushToken", FCMService.token);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        new PUTRequestSender(ref.getString("ip_port", null)+"/child/verify/parent", tokenJsonObj.toString(), null).execute();
     }
 
     private void fetchConfig(){
@@ -159,11 +195,6 @@ public class DeveloperActivity extends Activity implements DataCallback {
     }
 
     // ------------------- CALLBACK FUNCTIONS -------------------
-
-    @Override
-    public void onDataReceiving(JSONObject data) throws Exception {
-        Log.d("test", "Request response | Developer: " + data.toString());
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
