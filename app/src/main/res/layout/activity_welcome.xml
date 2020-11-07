@@ -28,7 +28,7 @@
         android:layout_gravity="center_horizontal"
         android:text="Pair"
         android:textColor="@android:color/white"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/btn_pair"
         android:onClick="scanQRCode" />
 
 </LinearLayout>

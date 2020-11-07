@@ -1,4 +1,4 @@
-package hero.util;
+package hero.data;
 
 import java.util.Calendar;
 

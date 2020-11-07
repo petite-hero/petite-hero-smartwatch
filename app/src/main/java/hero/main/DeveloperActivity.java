@@ -14,6 +14,13 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import hero.api.DataCallback;
 import hero.api.GETRequestSender;
 import hero.api.POSTRequestSender;
@@ -21,15 +28,8 @@ import hero.api.PUTRequestSender;
 import hero.service.FCMService;
 import hero.service.LocationService;
 import hero.util.Location;
-import hero.util.LocationDTO;
+import hero.data.LocationDTO;
 import hero.util.Util;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DeveloperActivity extends Activity {
 
@@ -39,7 +39,7 @@ public class DeveloperActivity extends Activity {
     FCMService fcmService;
 
     private static final String CHILD_ID = "3";
-    private static final String IP_PORT = "http://192.168.100.166:8080";
+    private static final String IP_PORT = "http://192.168.1.5:8080";
     private static final int INTERVAL = 5000;
 
 
@@ -58,7 +58,7 @@ public class DeveloperActivity extends Activity {
         fetchConfig();
 
         // test
-        setDefaultConfig(null);
+//        setDefaultConfig(null);
 
     }
 

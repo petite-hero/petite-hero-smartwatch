@@ -10,20 +10,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="aaa"
-            android:textColor="@android:color/white"/>
+        <ImageButton
+            android:id="@+id/btnNavTask"
+            android:layout_width="36px"
+            android:layout_height="36px"
+            android:scaleType="fitCenter"
+            android:padding="6px"
+            android:background="#00000000"
+            android:src="@drawable/task_active"
+            android:onClick="loadFragmentFromBtnPress"
+            android:tag="0"/>
+        <ImageButton
+            android:id="@+id/btnNavQuest"
+            android:layout_width="36px"
+            android:layout_height="36px"
+            android:scaleType="fitCenter"
+            android:padding="6px"
+            android:background="#00000000"
+            android:src="@drawable/quest"
+            android:onClick="loadFragmentFromBtnPress"
+            android:tag="1"/>
+        <ImageButton
+            android:id="@+id/btnNavProfile"
+            android:layout_width="36px"
+            android:layout_height="36px"
+            android:scaleType="fitCenter"
+            android:padding="6px"
+            android:background="#00000000"
+            android:src="@drawable/profile"
+            android:onClick="loadFragmentFromBtnPress"
+            android:tag="2"/>
 
     </LinearLayout>
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hulk"
-        android:textColor="@android:color/white"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

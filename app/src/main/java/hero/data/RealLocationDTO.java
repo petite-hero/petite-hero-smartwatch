@@ -1,4 +1,4 @@
-package hero.util;
+package hero.data;
 
 public class RealLocationDTO {
 

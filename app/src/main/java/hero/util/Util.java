@@ -24,4 +24,11 @@ public class Util {
         return calendar;
     }
 
+//    public static String calendarToTimeStr(Calendar cal){
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr.substring(0, 2)));
+//        calendar.set(Calendar.MINUTE, Integer.parseInt(timeStr.substring(3, 5)));
+////        return calendar;
+//    }
+
 }

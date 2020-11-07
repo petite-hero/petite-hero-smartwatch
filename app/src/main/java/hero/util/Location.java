@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import hero.data.LocationDTO;
+
 public class Location {
 
     public static List<LocationDTO> locList = new ArrayList<>();
