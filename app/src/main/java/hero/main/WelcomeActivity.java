@@ -1,9 +1,9 @@
 package hero.main;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -38,6 +38,10 @@ public class WelcomeActivity extends Activity{
         fcmService = new FCMService();
         fcmService.getDeviceToken();
 
+        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
+        pd.setCornerRadius(20);
+        btnScanQR.setBackground(pd);
+        // hidden developer mode
         btnScanQR.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -52,18 +56,31 @@ public class WelcomeActivity extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-        View decorView = getWindow().getDecorView();  // hide system status bar
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        // hide system status bar
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
+    // EVENT HANDLER: SCAN BUTTON PRESSED
     public void scanQRCode(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan");
-        integrator.setCameraId(0);  // Use a specific camera of the device
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
+
+        // test
+        SharedPreferences.Editor refEditor = ref.edit();
+        refEditor.putString("child_id", "3");
+        refEditor.apply();
+
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        intent.putExtra("isLogin", true);
+        finish();
+        startActivity(intent);
+
+//        IntentIntegrator integrator = new IntentIntegrator(this);
+//        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+//        integrator.setPrompt("Scan");
+//        integrator.setCameraId(0);  // Use a specific camera of the device
+//        integrator.setBeepEnabled(false);
+//        integrator.setBarcodeImageEnabled(true);
+//        integrator.initiateScan();
+
     }
 
     @Override
@@ -72,17 +89,15 @@ public class WelcomeActivity extends Activity{
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
 
+            // SAVE SCANNED CHILD ID & REPORT DEVICE TOKEN TO SERVER
+
             // get ID
             String scannedCode = result.getContents();
             if (scannedCode != null) {
                 SharedPreferences.Editor refEditor = ref.edit();
                 refEditor.putString("child_id", scannedCode);
                 refEditor.apply();
-                new AlertDialog.Builder(this)
-                    .setMessage("Child ID set as " + ref.getString("child_id", null))
-                    .setPositiveButton("OK", null)
-                    .show();
-                Toast.makeText(this, "Scanned ID: " + scannedCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
                 Log.d("test", "Scanned ID: " + scannedCode);
             }
 
@@ -103,8 +118,13 @@ public class WelcomeActivity extends Activity{
                     }
                 }
             ).execute();
-            Log.d("test", ref.getString("ip_port", null)+"/child/verify/parent");
-            Log.d("test", tokenJsonObj.toString());
+
+
+            // MOVE TO MAIN ACTIVITY
+            Intent intent = new Intent(this, MainScreenActivity.class);
+            intent.putExtra("isLogin", true);
+            finish();
+            startActivity(intent);
 
         }
     }

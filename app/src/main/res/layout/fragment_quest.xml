@@ -4,10 +4,42 @@
     android:layout_height="match_parent"
     tools:context="hero.components.QuestFragment">
 
-    <TextView
+    <HorizontalScrollView
+        android:id="@+id/sliderContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Quest"
-        android:textColor="@android:color/white"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <!-- active quests -->
+            <ScrollView
+                android:layout_width="240px"
+                android:layout_height="match_parent">
+                <ListView
+                    android:id="@+id/questList"
+                    android:layout_width="200px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
+                    android:layout_marginBottom="20px"
+                    android:dividerHeight="10px"/>
+            </ScrollView>
+
+            <!-- badges view -->
+            <RelativeLayout
+                android:layout_width="240px"
+                android:layout_height="match_parent">
+                <GridView
+                    android:id="@+id/badgeList"
+                    android:layout_width="match_parent"
+                    android:layout_height="240px"
+                    android:numColumns="3"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>

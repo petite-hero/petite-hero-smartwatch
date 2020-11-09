@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome!"
+        android:text="Xin chào!"
         android:textSize="32px"
         android:textColor="@color/colorStrongCyan"
         android:textAlignment="center"/>
@@ -26,9 +26,9 @@
         android:layout_height="40px"
         android:layout_marginTop="20px"
         android:layout_gravity="center_horizontal"
-        android:text="Pair"
+        android:text="Kết nối"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:background="@drawable/btn_pair"
         android:onClick="scanQRCode" />
 
 </LinearLayout>

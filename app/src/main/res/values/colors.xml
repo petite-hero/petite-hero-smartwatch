@@ -12,15 +12,14 @@
     <color name="colorRed">#ff571f</color>
 
     <color name="colorStrongCyanFocused">#dd00ade8</color>
-<!--    <color name="colorMediumCyan">#13c5ff</color>-->
-<!--    <color name="colorLightCyan">#9edbfa</color>-->
-<!--    <color name="colorYellow">#fbc424</color>-->
     <color name="colorRedFocused">#ddff571f</color>
     <color name="colorWhiteOpac">#66ffffff</color>
 
     <color name="colorTaskCategoryHousehold">#fbc424</color>
     <color name="colorTaskCategoryHomework">#00ade8</color>
     <color name="colorTaskCategorySkill">#07be8a</color>
+    <color name="colorTaskBackground">#3c3c3c</color>
+    <color name="colorTaskLate">#656565</color>
     <color name="colorTaskStatusDone">#07be8a</color>
     <color name="colorTaskStatusFailed">#ec546b</color>
     <color name="colorTaskStatusHanded">#785adf</color>

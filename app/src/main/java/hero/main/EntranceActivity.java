@@ -30,19 +30,22 @@ public class EntranceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        SharedPreferences ref = PreferenceManager.getDefaultSharedPreferences(this);
+        Intent intent;
+        if (ref.getString("child_id", null) == null) intent = new Intent(this, WelcomeActivity.class);
+        else intent = new Intent(this, MainScreenActivity.class);
+        startActivity(intent);
+
         setConfig();
         fetchTaskList();
-
-//        Intent intent = new Intent(this, WelcomeActivity.class);
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        startActivity(intent);
 
     }
 
     private void setConfig(){
         SharedPreferences ref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor refEditor = ref.edit();
-        refEditor.putString("child_id", CHILD_ID);
+//        refEditor.putString("child_id", CHILD_ID);
         refEditor.putString("ip_port", IP_PORT);
         refEditor.putInt("report_interval", INTERVAL);
         refEditor.apply();
@@ -66,9 +69,7 @@ public class EntranceActivity extends Activity {
                         Calendar toTime = Util.timeStrToCalendar(rowJsonObj.getString("toTime"));
                         String type = rowJsonObj.getString("type");
                         String description = rowJsonObj.getString("description");
-                        String photo = "";
-                        if (!rowJsonObj.isNull("photo")) photo = rowJsonObj.getString("photo");
-                        taskList.add(new TaskDTO(id, name, type, description, fromTime, toTime, status, photo));
+                        taskList.add(new TaskDTO(id, name, type, description, fromTime, toTime, status));
                     }
                     Log.d("test", "1234");
                     TaskDAO.getInstance(EntranceActivity.this).saveList(taskList);

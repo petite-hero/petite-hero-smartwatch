@@ -4,60 +4,41 @@
     android:layout_height="match_parent"
     tools:context="hero.components.TaskFragment">
 
-    <HorizontalScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <!-- In Progress column -->
-            <LinearLayout
-                android:layout_width="184px"
-                android:layout_height="match_parent"
-                android:layout_marginRight="10px"
+            <ListView
+                android:id="@+id/taskListActive"
+                android:layout_width="200px"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
                 android:layout_marginLeft="20px"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="In Progress"
-                    android:textColor="@android:color/white"
-                    android:textSize="10px"/>
-                <!-- data container -->
-                <ListView
-                    android:id="@+id/task_progress_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10px"
-                    android:dividerHeight="10px"/>
-            </LinearLayout>
+                android:layout_marginRight="20px"/>
 
-            <!-- Finish column -->
-            <LinearLayout
-                android:layout_width="184px"
-                android:layout_height="match_parent"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="10px"
+                android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
-                android:layout_marginLeft="10px"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Finished"
-                    android:textColor="@android:color/white"
-                    android:textSize="10px"/>
-                <!-- data container -->
-                <ListView
-                    android:id="@+id/task_finish_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10px"
-                    android:dividerHeight="10px">
-                </ListView>
-            </LinearLayout>
+                android:background="#656565"/>
+
+            <ListView
+                android:id="@+id/taskListLate"
+                android:layout_width="200px"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_marginBottom="20px"
+                android:dividerHeight="10px"/>
 
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
 
 </LinearLayout>

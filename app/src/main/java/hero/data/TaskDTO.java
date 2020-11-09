@@ -11,13 +11,12 @@ public class TaskDTO {
     Calendar fromTime;
     Calendar toTime;
     String status;
-    String photo;
 
     public TaskDTO(){
 
     }
 
-    public TaskDTO(long id, String name, String type, String detail, Calendar fromTime, Calendar toTime, String status, String photo) {
+    public TaskDTO(long id, String name, String type, String detail, Calendar fromTime, Calendar toTime, String status) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -25,7 +24,6 @@ public class TaskDTO {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.status = status;
-        this.photo = photo;
     }
 
     public long getId() {
@@ -84,11 +82,4 @@ public class TaskDTO {
         this.status = status;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
 }

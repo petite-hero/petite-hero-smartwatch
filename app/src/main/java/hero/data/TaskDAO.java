@@ -21,7 +21,7 @@ public class TaskDAO extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE Task(id TEXT NOT NULL PRIMARY KEY, name TEXT, type TEXT, detail TEXT," +
-                "from_time INTEGER, to_time INTEGER, status TEXT, photo TEXT)";
+                "from_time INTEGER, to_time INTEGER, status TEXT)";
         db.execSQL(createTable);
     }
 
@@ -49,7 +49,6 @@ public class TaskDAO extends SQLiteOpenHelper {
             values.put("from_time", dto.getFromTime().getTimeInMillis());
             values.put("to_time", dto.getToTime().getTimeInMillis());
             values.put("status", dto.getStatus());
-            values.put("photo", dto.getPhoto());
             db.insert("Task", null, values);
         }
         db.close();
@@ -58,7 +57,7 @@ public class TaskDAO extends SQLiteOpenHelper {
     public List getList() {
         List<TaskDTO> result = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT id, name, type, detail, from_time, to_time, status, photo FROM Task";
+        String sql = "SELECT id, name, type, detail, from_time, to_time, status FROM Task";
         Cursor cursor = db.rawQuery(sql, null);
         while (cursor.moveToNext()) {
             long id = cursor.getLong(0);
@@ -70,8 +69,7 @@ public class TaskDAO extends SQLiteOpenHelper {
             Calendar toTime = Calendar.getInstance();
             toTime.setTimeInMillis(cursor.getLong(5));
             String status = cursor.getString(6);
-            String photo = cursor.getString(7);
-            result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status, photo));
+            result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
         }
         cursor.close();
         db.close();
