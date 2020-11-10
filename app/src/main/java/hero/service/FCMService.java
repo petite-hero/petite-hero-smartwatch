@@ -1,6 +1,5 @@
 package hero.service;
 
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 public class FCMService extends FirebaseMessagingService {
 
@@ -28,25 +29,59 @@ public class FCMService extends FirebaseMessagingService {
 
         super.onMessageReceived(remoteMessage);
 
+        Map<String, String> noti = remoteMessage.getData();
+
         // SILENT NOTI LISTENER
-        if (remoteMessage.getNotification() == null) {
+        if (noti.get("title").equals("silent-noti")) {
 
-            // turning on/off emergency mode
-            if (remoteMessage.getData().get("title").equals("emergency")) LocationService.isEmergency = true;
-            if (remoteMessage.getData().get("title").equals("stop_emergency")) LocationService.isEmergency = false;
-
-            // turning on/off location reporting
-            if (remoteMessage.getData().get("title").equals("active")){
-                if (!LocationService.isRunning) {
-                    Intent locationIntent = new Intent(this, LocationService.class);
-                    startService(locationIntent);
-                }
-                LocationService.isRunning = true;
+            if (noti.get("body").equals("new-safezones")){
+//                Log.d("test", noti.get("data"));
             }
-            if (remoteMessage.getData().get("title").equals("inactive")) LocationService.isRunning = false;
 
-            Log.d("test", "====> Here is title from Data: " + remoteMessage.getData().get("title"));
-            Log.d("test", "====> Here is body from Data: " + remoteMessage.getData().get("body"));
+            if (noti.get("body").equals("updated-safezones")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("active")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("inactive")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("emergency")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("stop-emergency")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("new-tasks")){
+//                Log.d("test", noti.get("data"));
+            }
+
+            if (noti.get("body").equals("updated_tasks")){
+//                Log.d("test", noti.get("data"));
+            }
+
+//            // turning on/off emergency mode
+//            if (remoteMessage.getData().get("title").equals("emergency")) LocationService.isEmergency = true;
+//            if (remoteMessage.getData().get("title").equals("stop_emergency")) LocationService.isEmergency = false;
+//
+//            // turning on/off location reporting
+//            if (remoteMessage.getData().get("title").equals("active")){
+//                if (!LocationService.isRunning) {
+//                    Intent locationIntent = new Intent(this, LocationService.class);
+//                    startService(locationIntent);
+//                }
+//                LocationService.isRunning = true;
+//            }
+//            if (remoteMessage.getData().get("title").equals("inactive")) LocationService.isRunning = false;
+//
+//            Log.d("test", "====> Here is title from Data: " + remoteMessage.getData().get("title"));
+//            Log.d("test", "====> Here is body from Data: " + remoteMessage.getData().get("body"));
 
         // NORMAL NOTI LISTENER
         } else {

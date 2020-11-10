@@ -2,6 +2,7 @@ package hero.components;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,13 +14,20 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import hero.api.DataCallback;
+import hero.api.GETRequestSender;
 import hero.main.R;
 
 public class ProfileFragment extends Fragment {
@@ -28,6 +36,7 @@ public class ProfileFragment extends Fragment {
     HorizontalScrollView sliderContainer;
     ImageView imvAvatar;
     View nameContainer, taskSummaryContainer, questSummaryContainer;
+    TextView txtName, txtNickname;
     View btnLogout;
 
     @Override
@@ -40,6 +49,8 @@ public class ProfileFragment extends Fragment {
         nameContainer = view.findViewById(R.id.nameContainer);
         taskSummaryContainer = view.findViewById(R.id.taskSummaryContainer);
         questSummaryContainer = view.findViewById(R.id.questSummaryContainer);
+        txtName = view.findViewById(R.id.txtName);
+        txtNickname = view.findViewById(R.id.txtNickname);
         btnLogout = view.findViewById(R.id.btnLogout);
 
         setAvatar();
@@ -77,15 +88,15 @@ public class ProfileFragment extends Fragment {
     private void setGraphic(){
 
         // name
-        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
+        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorTaskBackground));
         pd.setCornerRadius(20);
         nameContainer.setBackground(pd);
         // task summary
-        pd = new PaintDrawable(Color.WHITE);
+        pd = new PaintDrawable(getResources().getColor(R.color.colorTaskBackground));
         pd.setCornerRadius(20);
         taskSummaryContainer.setBackground(pd);
         // quest summary
-        pd = new PaintDrawable(Color.WHITE);
+        pd = new PaintDrawable(getResources().getColor(R.color.colorTaskBackground));
         pd.setCornerRadius(20);
         questSummaryContainer.setBackground(pd);
         // button logout
@@ -115,6 +126,19 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setData(){
+
+        SharedPreferences ref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        new GETRequestSender(ref.getString("ip_port", null)+"/child/"+ref.getString("child_id", null),
+                new DataCallback() {
+                    @Override
+                    public void onDataReceiving(JSONObject data) throws Exception {
+                        Log.d("test", "Request response: " + data.toString());
+                        JSONObject childObj = data.getJSONObject("data");
+                        txtName.setText(childObj.getString("firstName") + " " + childObj.getString("lastName"));
+                        txtNickname.setText('(' + childObj.getString("nickName") + ')');
+                    }
+                }
+        ).execute();
 
     }
 

@@ -54,7 +54,34 @@ public class TaskDAO extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List getList() {
+    public List getActiveTask() {
+        List<TaskDTO> result = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT id, name, type, detail, from_time, to_time, status FROM Task ORDER BY from_time";
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            long id = cursor.getLong(0);
+            String name = cursor.getString(1);
+            String type = cursor.getString(2);
+            String detail = cursor.getString(3);
+            Calendar fromTime = Calendar.getInstance();
+            fromTime.setTimeInMillis(cursor.getLong(4));
+            Calendar toTime = Calendar.getInstance();
+            toTime.setTimeInMillis(cursor.getLong(5));
+            String status = cursor.getString(6);
+
+            if (Calendar.getInstance().getTimeInMillis() > fromTime.getTimeInMillis() &&
+                    Calendar.getInstance().getTimeInMillis() < toTime.getTimeInMillis()) {
+                result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
+                break;
+            }
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    public List getListLate() {
         List<TaskDTO> result = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT id, name, type, detail, from_time, to_time, status FROM Task";
@@ -69,12 +96,25 @@ public class TaskDAO extends SQLiteOpenHelper {
             Calendar toTime = Calendar.getInstance();
             toTime.setTimeInMillis(cursor.getLong(5));
             String status = cursor.getString(6);
-            result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
+
+            if (Calendar.getInstance().getTimeInMillis() > toTime.getTimeInMillis())
+                result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
         }
         cursor.close();
         db.close();
         return result;
     }
+
+    public void delete(Context context, long id){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Status", 0);
+        db.delete("Task", "id = " + id, null);
+        db.close();
+    }
+
+
+
 //
 //    public BookDTO getDataDetail(Context context, String id) {
 //        BookDTO result = null;

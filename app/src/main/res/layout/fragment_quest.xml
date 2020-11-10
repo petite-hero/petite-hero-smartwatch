@@ -17,15 +17,23 @@
             <ScrollView
                 android:layout_width="240px"
                 android:layout_height="match_parent">
-                <ListView
-                    android:id="@+id/questList"
-                    android:layout_width="200px"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10px"
-                    android:layout_marginLeft="20px"
-                    android:layout_marginRight="20px"
-                    android:layout_marginBottom="20px"
-                    android:dividerHeight="10px"/>
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0px"/>
+                    <ListView
+                        android:id="@+id/questList"
+                        android:layout_width="200px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10px"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginRight="20px"
+                        android:layout_marginBottom="20px"
+                        android:dividerHeight="10px"/>
+                </LinearLayout>
             </ScrollView>
 
             <!-- badges view -->
@@ -36,6 +44,13 @@
                     android:id="@+id/badgeList"
                     android:layout_width="match_parent"
                     android:layout_height="240px"
+                    android:layout_marginLeft="24px"
+                    android:layout_marginRight="24px"
+                    android:layout_marginTop="18px"
+                    android:layout_marginBottom="18px"
+                    android:columnWidth="48px"
+                    android:horizontalSpacing="24px"
+                    android:verticalSpacing="10px"
                     android:numColumns="3"/>
             </RelativeLayout>
 

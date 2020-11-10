@@ -51,6 +51,7 @@ public class MainScreenActivity extends Activity {
     // supports
     int currentFragmentIndex;
     Uri outputUri;
+    long currentTaskId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,9 @@ public class MainScreenActivity extends Activity {
 
     }
 
-    public void takeImage(View view){
+    public void takeProofImage(long taskId){
+
+        currentTaskId = taskId;
 
         String directoryName = Environment.getExternalStorageDirectory() + "/PetiteHero";
         File directory = new File(directoryName);
@@ -266,7 +269,7 @@ public class MainScreenActivity extends Activity {
             if (requestCode == CAPTURE_REQUEST) {
                 final Map<String, String> params = new HashMap<>(2);
                 SharedPreferences ref = PreferenceManager.getDefaultSharedPreferences(this);
-                final String url = ref.getString("ip_port", null)+"/task/36/submit";
+                final String url = ref.getString("ip_port", null)+"/task/" + currentTaskId + "/submit";
                 Thread thread = new Thread(){
                     public void run(){
                         try {
@@ -278,6 +281,28 @@ public class MainScreenActivity extends Activity {
                     }
                 };
                 thread.start();
+                new AlertDialog.Builder(MainScreenActivity.this)
+                        .setMessage("Ảnh đã được gửi đi")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                                FragmentTransaction ft = MainScreenActivity.this.getFragmentManager().beginTransaction();
+                                ft.detach(fragmentList[0]);
+                                ft.attach(fragmentList[0]);
+                                ft.commit();
+                            }
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                                FragmentTransaction ft = MainScreenActivity.this.getFragmentManager().beginTransaction();
+                                ft.detach(fragmentList[0]);
+                                ft.attach(fragmentList[0]);
+                                ft.commit();
+                            }
+                        })
+                        .show();
             }
 
         }

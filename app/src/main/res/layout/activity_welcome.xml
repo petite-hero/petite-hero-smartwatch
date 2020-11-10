@@ -27,8 +27,10 @@
         android:layout_marginTop="20px"
         android:layout_gravity="center_horizontal"
         android:text="Kết nối"
-        android:textAllCaps="false"
         android:textColor="@android:color/white"
+        android:textSize="16px"
         android:onClick="scanQRCode" />
+<!--    mysterious bug-->
+<!--    android:textAllCaps="false"-->
 
 </LinearLayout>

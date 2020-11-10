@@ -26,17 +26,19 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true">
                     <TextView
+                        android:id="@+id/txtName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20px"
-                        android:text="Nguyễn Phú Hưng Jr."
                         android:textSize="16px"
+                        android:textColor="@android:color/white"
                         android:textAlignment="center"/>
                     <TextView
+                        android:id="@+id/txtNickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="03/08/2012"
                         android:textSize="12px"
+                        android:textColor="@android:color/white"
                         android:textAlignment="center"/>
                 </LinearLayout>
                 <ImageView
@@ -53,13 +55,12 @@
                     android:layout_height="70px"
                     android:layout_marginTop="10px"
                     android:layout_marginLeft="36px"
-                    android:layout_below="@+id/nameContainer"
-                    android:background="@android:color/white">
+                    android:layout_below="@+id/nameContainer">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8px"
-                        android:text="Việc"
+                        android:text="Công việc"
                         android:textSize="16px"
                         android:lineHeight="16px"
                         android:textAlignment="center"
@@ -67,7 +68,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="09"
+                        android:text="01"
                         android:textSize="30px"
                         android:textFontWeight="700"
                         android:textAlignment="center"
@@ -82,8 +83,7 @@
                     android:layout_marginTop="10px"
                     android:layout_marginLeft="8px"
                     android:layout_below="@+id/nameContainer"
-                    android:layout_toRightOf="@+id/taskSummaryContainer"
-                    android:background="@android:color/white">
+                    android:layout_toRightOf="@+id/taskSummaryContainer">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="05"
+                        android:text="02"
                         android:textSize="30px"
                         android:textFontWeight="700"
                         android:textAlignment="center"

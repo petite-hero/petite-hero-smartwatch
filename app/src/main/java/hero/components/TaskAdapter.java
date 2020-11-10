@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import hero.data.TaskDTO;
+import hero.main.MainScreenActivity;
 import hero.main.R;
 import hero.util.Util;
 
@@ -37,7 +38,7 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         // DECLARE NEEDED COMPONENTS
         View vi = inflater.inflate(R.layout.item_task, null);
         Resources resource = activity.getResources();
-        TaskDTO task = taskList.get(position);
+        final TaskDTO task = taskList.get(position);
 
         View taskFrontFaceContainer = vi.findViewById(R.id.taskFrontFaceContainer);
         View taskBackFaceContainer = vi.findViewById(R.id.taskBackFaceContainer);
@@ -106,6 +107,14 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         txtName.setText(task.getName());
         txtTo.setText("Đến " + Util.calendarToTimeStr(task.getToTime()));
         txtDetail.setText(task.getDetail());
+
+        // SET TAKE IMAGE ICON CLICK LISTENER
+        imvIconCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainScreenActivity) activity).takeProofImage(task.getId());
+            }
+        });
 
         // apply to view
         return vi;

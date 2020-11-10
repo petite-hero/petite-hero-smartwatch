@@ -3,4 +3,6 @@
     android:id="@+id/badge"
     android:layout_width="48px"
     android:layout_height="48px"
-    android:padding="12px"/>
+    android:padding="10px"
+    android:scaleType="centerCrop"
+    android:adjustViewBounds="true"/>

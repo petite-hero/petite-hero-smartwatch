@@ -39,7 +39,7 @@ public class BadgeAdapter extends ArrayAdapter<String> {
         imvIconBadge.setImageResource(resource.getIdentifier(badgeName, "drawable", activity.getPackageName()));
         PaintDrawable pd = new PaintDrawable(resource.getColor(R.color.colorTaskBackground));
         pd.setCornerRadius(20);
-//        imvIconBadge.setBackground(pd);
+        imvIconBadge.setBackground(pd);
 
         // apply to view
         return vi;

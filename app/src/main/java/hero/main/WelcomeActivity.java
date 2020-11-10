@@ -41,6 +41,7 @@ public class WelcomeActivity extends Activity{
         PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
         pd.setCornerRadius(20);
         btnScanQR.setBackground(pd);
+
         // hidden developer mode
         btnScanQR.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -63,23 +64,23 @@ public class WelcomeActivity extends Activity{
     // EVENT HANDLER: SCAN BUTTON PRESSED
     public void scanQRCode(View view) {
 
-        // test
-        SharedPreferences.Editor refEditor = ref.edit();
-        refEditor.putString("child_id", "3");
-        refEditor.apply();
+        // TEST
+//        SharedPreferences.Editor refEditor = ref.edit();
+//        refEditor.putString("child_id", "3");
+//        refEditor.apply();
+//
+//        Intent intent = new Intent(this, MainScreenActivity.class);
+//        intent.putExtra("isLogin", true);
+//        finish();
+//        startActivity(intent);
 
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        intent.putExtra("isLogin", true);
-        finish();
-        startActivity(intent);
-
-//        IntentIntegrator integrator = new IntentIntegrator(this);
-//        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-//        integrator.setPrompt("Scan");
-//        integrator.setCameraId(0);  // Use a specific camera of the device
-//        integrator.setBeepEnabled(false);
-//        integrator.setBarcodeImageEnabled(true);
-//        integrator.initiateScan();
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Scan");
+        integrator.setCameraId(0);  // Use a specific camera of the device
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
 
     }
 
