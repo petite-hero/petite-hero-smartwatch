@@ -14,13 +14,13 @@ import java.util.List;
 
 import hero.main.R;
 
-public class BadgeAdapter extends ArrayAdapter<String> {
+public class BadgeAdapter extends ArrayAdapter<Integer> {
 
     private Activity activity;
-    private List<String> badgeList;
+    private List<Integer> badgeList;
     private static LayoutInflater inflater = null;
 
-    public BadgeAdapter(Activity activity, int textViewResourceId, List<String> badgeList) {
+    public BadgeAdapter(Activity activity, int textViewResourceId, List<Integer> badgeList) {
         super(activity, textViewResourceId, badgeList);
         this.activity = activity;
         this.badgeList = badgeList;
@@ -32,7 +32,9 @@ public class BadgeAdapter extends ArrayAdapter<String> {
         // DECLARE NEEDED COMPONENTS
         View vi = inflater.inflate(R.layout.item_badge, null);
         Resources resource = activity.getResources();
-        String badgeName = badgeList.get(position);
+        String badgeName = "awards_";
+        if (badgeList.get(position) < 10) badgeName += "0";
+        badgeName += badgeList.get(position);
         ImageView imvIconBadge = vi.findViewById(R.id.badge);
 
         // SET LAYOUT ATTRIBUTES

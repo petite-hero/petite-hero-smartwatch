@@ -25,7 +25,7 @@ public class QuestFragment extends Fragment {
     GridView grvBadge;
 
     List<QuestDTO> questList;
-    List<String> badgeList;
+    List<Integer> badgeList;
 
 
     @Override
@@ -94,15 +94,9 @@ public class QuestFragment extends Fragment {
 
     private void fetchBadgeList(){
         badgeList = new ArrayList<>();
-        badgeList.add("badge_01");
-        badgeList.add("badge_24");
-        badgeList.add("badge_27");
-        badgeList.add("badge_01");
-        badgeList.add("badge_24");
-//        badgeList.add("badge_27");
-//        badgeList.add("badge_01");
-//        badgeList.add("badge_24");
-//        badgeList.add("badge_27");
+        badgeList.add(1);
+        badgeList.add(24);
+        badgeList.add(27);
         grvBadge.setAdapter(new BadgeAdapter(getActivity(), 0, badgeList));
     }
 
