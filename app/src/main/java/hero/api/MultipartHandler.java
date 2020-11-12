@@ -21,7 +21,7 @@ public class MultipartHandler {
         InputStream inputStream = null;
 
         String twoHyphens = "--";
-        String boundary = "*****" + Long.toString(System.currentTimeMillis()) + "*****";
+        String boundary = "*****" + System.currentTimeMillis() + "*****";
         String lineEnd = "\r\n";
 
         String result = "";

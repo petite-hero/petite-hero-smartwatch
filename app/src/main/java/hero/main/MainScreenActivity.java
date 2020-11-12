@@ -75,7 +75,8 @@ public class MainScreenActivity extends Activity {
         fragmentManager = getFragmentManager();
         fragmentList = new Fragment[3];
 
-        if (getIntent().getBooleanExtra("isLogin", false)) loadFragment(2);
+        int startingFragment = getIntent().getIntExtra("fragment", -1);
+        if (startingFragment != -1) loadFragment(startingFragment);
         else loadFragment(0);
 
         // hidden logout

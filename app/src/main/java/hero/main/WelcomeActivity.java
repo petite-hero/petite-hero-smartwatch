@@ -72,13 +72,16 @@ public class WelcomeActivity extends Activity{
 
         // TEST - skip login
         if (IS_SKIP_LOGIN) {
+            String childId = "3";
             // set child id
-            spSupport.set("child_id", "3");
+            spSupport.set("child_id", childId);
             // open MainScreenActivity
-            Intent intent = new Intent(this, MainScreenActivity.class);
-            intent.putExtra("isLogin", true);
+            Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
+            intent.putExtra("fragment", 2);
             finish();
             startActivity(intent);
+            // put device token to server
+            HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, null);
         }
 
         // scan child id
@@ -121,7 +124,7 @@ public class WelcomeActivity extends Activity{
                     } else{
                         // MOVE TO MAIN ACTIVITY
                         Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
-                        intent.putExtra("isLogin", true);
+                        intent.putExtra("fragment", 2);
                         finish();
                         startActivity(intent);
                         Toast.makeText(WelcomeActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();

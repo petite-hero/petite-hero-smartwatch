@@ -44,9 +44,9 @@ public class TaskFragment extends Fragment {
         livTaskLate.getLayoutParams().height = 170*taskListLate.size() - 10;
 
         if (taskListActive.size() == 0) livTaskActive.setVisibility(View.GONE);
-        else  livTaskActive.setVisibility(View.VISIBLE);
+        else livTaskActive.setVisibility(View.VISIBLE);
         if (taskListActive.size() > 0 && taskListLate.size() > 0) taskListSeparator.setVisibility(View.VISIBLE);
-        else  taskListSeparator.setVisibility(View.GONE);
+        else taskListSeparator.setVisibility(View.GONE);
 
     }
 
