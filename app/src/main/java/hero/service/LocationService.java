@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 import hero.api.DataCallback;
-import hero.api.POSTRequestSender;
+import hero.api.HttpRequestSender;
 
 public class LocationService extends Service {
 
@@ -72,8 +72,8 @@ public class LocationService extends Service {
         } catch (JSONException e){
             e.printStackTrace();
         }
-        new POSTRequestSender(ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(),
-//        new POSTRequestSender(ref.getString("ip_port", null) + "/location/current-location/true", locationJsonObj.toString(),
+        new HttpRequestSender("POST", ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(),
+//        new HttpRequestSender("POST", ref.getString("ip_port", null) + "/location/current-location/true", locationJsonObj.toString(),
             new DataCallback() {
                 @Override
                 public void onDataReceiving(JSONObject data) throws Exception {

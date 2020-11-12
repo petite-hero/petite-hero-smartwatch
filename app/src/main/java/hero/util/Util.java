@@ -4,6 +4,14 @@ import java.util.Calendar;
 
 public class Util {
 
+    public static final String[] BADGE_COLORS = new String[]{
+            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+    };
+
     public Util(){
 
     }
@@ -34,6 +42,13 @@ public class Util {
         if (minute < 10) result += 0;
         result += minute;
         return result;
+    }
+
+    public static String badgeIdToName(int id){
+        String badgeName = "awards_";
+        if (id < 10) badgeName += "0";
+        badgeName += id;
+        return badgeName;
     }
 
 }

@@ -6,7 +6,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10px">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,7 +17,6 @@
                 android:id="@+id/taskListActive"
                 android:layout_width="200px"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10px"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"/>
 
@@ -27,17 +27,18 @@
                 android:layout_marginTop="10px"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
-                android:background="#656565"
+                android:layout_marginBottom="10px"
+                android:background="#f7f7f7"
                 android:visibility="gone"/>
 
             <ListView
                 android:id="@+id/taskListLate"
                 android:layout_width="200px"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10px"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
                 android:layout_marginBottom="20px"
+                android:divider="@android:color/white"
                 android:dividerHeight="10px"/>
 
         </LinearLayout>

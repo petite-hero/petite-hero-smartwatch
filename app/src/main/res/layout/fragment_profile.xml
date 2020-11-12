@@ -2,138 +2,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="hero.components.ProfileFragment">
 
-    <HorizontalScrollView
-        android:id="@+id/sliderContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- avatar & name -->
+    <RelativeLayout
+        android:layout_width="240px"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imvAvatar"
+            android:layout_width="40px"
+            android:layout_height="40px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="24px"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <!-- main profile fragment -->
-            <RelativeLayout
-                android:layout_width="240px"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:id="@+id/nameContainer"
-                    android:orientation="vertical"
-                    android:layout_width="168px"
-                    android:layout_height="70px"
-                    android:layout_marginTop="30px"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true">
-                    <TextView
-                        android:id="@+id/txtName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20px"
-                        android:textSize="16px"
-                        android:textColor="@android:color/white"
-                        android:textAlignment="center"/>
-                    <TextView
-                        android:id="@+id/txtNickname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12px"
-                        android:textColor="@android:color/white"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-                <ImageView
-                    android:id="@+id/imvAvatar"
-                    android:layout_width="40px"
-                    android:layout_height="40px"
-                    android:layout_marginTop="10px"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"/>
-                <LinearLayout
-                    android:id="@+id/taskSummaryContainer"
-                    android:orientation="vertical"
-                    android:layout_width="80px"
-                    android:layout_height="70px"
-                    android:layout_marginTop="10px"
-                    android:layout_marginLeft="36px"
-                    android:layout_below="@+id/nameContainer">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8px"
-                        android:text="Công việc"
-                        android:textSize="16px"
-                        android:lineHeight="16px"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorStrongCyan"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="01"
-                        android:textSize="30px"
-                        android:textFontWeight="700"
-                        android:textAlignment="center"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/colorStrongCyan"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/questSummaryContainer"
-                    android:orientation="vertical"
-                    android:layout_width="80px"
-                    android:layout_height="70px"
-                    android:layout_marginTop="10px"
-                    android:layout_marginLeft="8px"
-                    android:layout_below="@+id/nameContainer"
-                    android:layout_toRightOf="@+id/taskSummaryContainer">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8px"
-                        android:text="Nhiệm vụ"
-                        android:textSize="16px"
-                        android:lineHeight="16px"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorStrongCyan"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="02"
-                        android:textSize="30px"
-                        android:textFontWeight="700"
-                        android:textAlignment="center"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/colorStrongCyan"/>
-                </LinearLayout>
-            </RelativeLayout>
-
-            <!-- logout button container -->
-            <RelativeLayout
-                android:layout_width="240px"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:id="@+id/btnLogout"
-                    android:layout_width="149px"
-                    android:layout_height="40px"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="24px"
-                        android:layout_height="24px"
-                        android:layout_marginTop="8px"
-                        android:layout_marginLeft="25px"
-                        android:layout_marginRight="5px"
-                        android:src="@drawable/icon_logout"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Đăng xuất"
-                        android:textSize="16px"
-                        android:gravity="center"
-                        android:onClick="logoutBtnPress"/>
-                </LinearLayout>
-            </RelativeLayout>
-
+            android:orientation="vertical"
+            android:layout_width="140px"
+            android:layout_height="70px"
+            android:layout_marginTop="10px"
+            android:layout_marginRight="20px"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true">
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16px"/>
+            <TextView
+                android:id="@+id/txtNickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12px"/>
         </LinearLayout>
-    </HorizontalScrollView>
+    </RelativeLayout>
+
+    <!-- badges view -->
+    <RelativeLayout
+        android:layout_width="240px"
+        android:layout_height="wrap_content">
+        <GridView
+            android:id="@+id/badgeList"
+            android:layout_width="wrap_content"
+            android:layout_height="140px"
+            android:layout_marginLeft="24px"
+            android:layout_marginRight="24px"
+            android:columnWidth="48px"
+            android:horizontalSpacing="24px"
+            android:verticalSpacing="10px"
+            android:numColumns="3"/>
+    </RelativeLayout>
 
 </LinearLayout>

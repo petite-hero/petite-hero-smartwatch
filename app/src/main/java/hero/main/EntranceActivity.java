@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 public class EntranceActivity extends Activity {
 
     private static final String CHILD_ID = "1";
-    private static final String IP_PORT = "http://10.1.142.178:8080";
+    private static final String IP_PORT = "http://192.168.1.6:8080";
     private static final int INTERVAL = 5000;
 
     @Override
@@ -35,7 +35,5 @@ public class EntranceActivity extends Activity {
         refEditor.putInt("report_interval", INTERVAL);
         refEditor.apply();
     }
-
-
 
 }

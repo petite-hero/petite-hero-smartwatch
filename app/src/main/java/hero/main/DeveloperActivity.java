@@ -22,13 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hero.api.DataCallback;
-import hero.api.GETRequestSender;
-import hero.api.POSTRequestSender;
-import hero.api.PUTRequestSender;
+import hero.api.HttpRequestSender;
+import hero.data.LocationDTO;
 import hero.service.FCMService;
 import hero.service.LocationService;
 import hero.util.Location;
-import hero.data.LocationDTO;
 import hero.util.Util;
 
 public class DeveloperActivity extends Activity {
@@ -127,7 +125,7 @@ public class DeveloperActivity extends Activity {
         } catch (JSONException e){
             e.printStackTrace();
         }
-        new POSTRequestSender(ref.getString("ip_port", null) + "/location/current-location/false", locationJsonObj.toString(),
+        new HttpRequestSender("POST", ref.getString("ip_port", null) + "/location/current-location/false", locationJsonObj.toString(),
             new DataCallback() {
                 @Override
                 public void onDataReceiving(JSONObject data) throws Exception {
@@ -138,9 +136,9 @@ public class DeveloperActivity extends Activity {
     }
 
     public void getSafeZones(View view){
-        new GETRequestSender(ref.getString("ip_port", null) + "/location/list/" +
+        new HttpRequestSender("GET", ref.getString("ip_port", null) + "/location/list/" +
                                  ref.getString("child_id", null) + "/"+
-                                 Util.getLongHour0(),
+                                 Util.getLongHour0(), null,
             new DataCallback() {
                 @Override
                 public void onDataReceiving(JSONObject data) throws Exception {
@@ -181,7 +179,7 @@ public class DeveloperActivity extends Activity {
         } catch (JSONException e){
             e.printStackTrace();
         }
-        new PUTRequestSender(ref.getString("ip_port", null)+"/child/verify/parent", tokenJsonObj.toString(), null).execute();
+        new HttpRequestSender("PUT", ref.getString("ip_port", null)+"/child/verify/parent", tokenJsonObj.toString(), null).execute();
     }
 
     private void fetchConfig(){

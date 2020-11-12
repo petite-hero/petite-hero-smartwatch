@@ -30,8 +30,7 @@
             android:layout_marginBottom="10px"
             android:textAlignment="center"
             android:textSize="20px"
-            android:textFontWeight="700"
-            android:textColor="@android:color/white"/>
+            android:textFontWeight="700"/>
         <View
             android:id="@+id/decorLeft"
             android:layout_width="10px"
@@ -51,8 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="80px"
             android:layout_margin="20px"
-            android:textSize="14px"
-            android:textColor="@android:color/white"/>
+            android:textSize="14px"/>
         <View
             android:id="@+id/decorLeftBack"
             android:layout_width="10px"

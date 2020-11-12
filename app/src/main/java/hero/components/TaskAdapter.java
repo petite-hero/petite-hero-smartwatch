@@ -3,6 +3,7 @@ package hero.components;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.PaintDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,9 +70,12 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         }
 
         // set layout for FRONT FACE CONTAINER
-        PaintDrawable pd = new PaintDrawable(resource.getColor(R.color.colorTaskBackground));
-        pd.setCornerRadius(20);
-        taskFrontFaceContainer.setBackground(pd);
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(resource.getColor(R.color.colorTaskBackground));
+        if (this.isActive) gd.setStroke(2, resource.getColor(colorId));
+        else gd.setStroke(2, resource.getColor(R.color.colorTaskLate));
+        gd.setCornerRadius(20);
+        taskFrontFaceContainer.setBackground(gd);
 
         // set layout for "task type" icon
         imvIconTaskType.setImageResource(iconId);
@@ -82,15 +86,19 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         if (!this.isActive) txtTo.setTextColor(resource.getColor(R.color.colorTaskLate));
 
         // set layout for left decoration
+        PaintDrawable pd;
         if (this.isActive) pd = new PaintDrawable(resource.getColor(colorId));
         else pd = new PaintDrawable(resource.getColor(R.color.colorTaskLate));
         pd.setCornerRadii(new float[] {10,20,0,0,0,0,10,20});
         decorLeft.setBackground(pd);
 
         // set layout for BACK FACE CONTAINER
-        pd = new PaintDrawable(resource.getColor(R.color.colorTaskBackground));
-        pd.setCornerRadius(20);
-        taskBackFaceContainer.setBackground(pd);
+        gd = new GradientDrawable();
+        gd.setColor(resource.getColor(R.color.colorTaskBackground));
+        if (this.isActive) gd.setStroke(2, resource.getColor(colorId));
+        else gd.setStroke(2, resource.getColor(R.color.colorTaskLate));
+        gd.setCornerRadius(20);
+        taskBackFaceContainer.setBackground(gd);
 
         // set layout for "camera" icon
         pd = new PaintDrawable(resource.getColor(colorId));

@@ -2,11 +2,8 @@ package hero.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,17 +11,19 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import hero.api.DataCallback;
-import hero.api.PUTRequestSender;
+import hero.data.HttpDAO;
 import hero.service.FCMService;
+import hero.util.SPSupport;
 
 public class WelcomeActivity extends Activity{
 
+    private static final boolean IS_SKIP_LOGIN = true;  // testing
+
     Button btnScanQR;
-    SharedPreferences ref;
+    SPSupport spSupport;
     FCMService fcmService;
 
     @Override
@@ -34,15 +33,22 @@ public class WelcomeActivity extends Activity{
         setContentView(R.layout.activity_welcome);
 
         btnScanQR = findViewById(R.id.btnScanQR);
-        ref = PreferenceManager.getDefaultSharedPreferences(this);
+        spSupport = new SPSupport(this);
         fcmService = new FCMService();
         fcmService.getDeviceToken();
 
+        initLayout();
+
+    }
+
+    private void initLayout(){
+
+        // scan button
         PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
         pd.setCornerRadius(20);
         btnScanQR.setBackground(pd);
 
-        // hidden developer mode
+        // listener to open hidden developer mode
         btnScanQR.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -64,23 +70,27 @@ public class WelcomeActivity extends Activity{
     // EVENT HANDLER: SCAN BUTTON PRESSED
     public void scanQRCode(View view) {
 
-        // TEST
-//        SharedPreferences.Editor refEditor = ref.edit();
-//        refEditor.putString("child_id", "3");
-//        refEditor.apply();
-//
-//        Intent intent = new Intent(this, MainScreenActivity.class);
-//        intent.putExtra("isLogin", true);
-//        finish();
-//        startActivity(intent);
+        // TEST - skip login
+        if (IS_SKIP_LOGIN) {
+            // set child id
+            spSupport.set("child_id", "3");
+            // open MainScreenActivity
+            Intent intent = new Intent(this, MainScreenActivity.class);
+            intent.putExtra("isLogin", true);
+            finish();
+            startActivity(intent);
+        }
 
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan");
-        integrator.setCameraId(0);  // Use a specific camera of the device
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
+        // scan child id
+        else {
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setPrompt("Scan");
+            integrator.setCameraId(0);  // Use a specific camera of the device
+            integrator.setBeepEnabled(false);
+            integrator.setBarcodeImageEnabled(true);
+            integrator.initiateScan();
+        }
 
     }
 
@@ -94,38 +104,30 @@ public class WelcomeActivity extends Activity{
 
             // get ID
             String scannedCode = result.getContents();
-            if (scannedCode != null) {
-                SharedPreferences.Editor refEditor = ref.edit();
-                refEditor.putString("child_id", scannedCode);
-                refEditor.apply();
-                Toast.makeText(this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
-                Log.d("test", "Scanned ID: " + scannedCode);
-            }
+            // save child ID to local
+            spSupport.set("child_id", scannedCode);
 
-            // put device token to server
-            JSONObject tokenJsonObj = new JSONObject();
-            try {
-                tokenJsonObj.put("childId", scannedCode)
-                        .put("pushToken", FCMService.token);
-                Log.d("test", "device token: " + FCMService.token);
-            } catch (JSONException e){
-                e.printStackTrace();
+            // save device token to server
+            if (FCMService.token == null || FCMService.token.length() == 0){
+                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+                return;
             }
-            new PUTRequestSender(ref.getString("ip_port", null)+"/child/verify/parent", tokenJsonObj.toString(),
-                new DataCallback() {
-                    @Override
-                    public void onDataReceiving(JSONObject data) throws Exception {
-                        Log.d("test", data.toString());
+            HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(scannedCode, FCMService.token, new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    if (data == null){
+                        Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+                        return;
+                    } else{
+                        // MOVE TO MAIN ACTIVITY
+                        Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
+                        intent.putExtra("isLogin", true);
+                        finish();
+                        startActivity(intent);
+                        Toast.makeText(WelcomeActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
                     }
                 }
-            ).execute();
-
-
-            // MOVE TO MAIN ACTIVITY
-            Intent intent = new Intent(this, MainScreenActivity.class);
-            intent.putExtra("isLogin", true);
-            finish();
-            startActivity(intent);
+            });
 
         }
     }

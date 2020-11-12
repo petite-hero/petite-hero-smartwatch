@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import hero.api.Multipart;
+import hero.api.MultipartHandler;
 import hero.components.ProfileFragment;
 import hero.components.QuestFragment;
 import hero.components.TaskFragment;
@@ -67,7 +67,7 @@ public class MainScreenActivity extends Activity {
 
         navBarFocusHighlightContainer = findViewById(R.id.navBarFocusHighlightContainer);
         View navBarFocusHighlight = findViewById(R.id.navBarFocusHighlight);
-        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
+        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorGray));
         pd.setCornerRadius(2);
         navBarFocusHighlight.setBackground(pd);
 
@@ -77,6 +77,15 @@ public class MainScreenActivity extends Activity {
 
         if (getIntent().getBooleanExtra("isLogin", false)) loadFragment(2);
         else loadFragment(0);
+
+        // hidden logout
+        btnNavList[2].setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                logout();
+                return true;
+            }
+        });
 
     }
 
@@ -219,29 +228,6 @@ public class MainScreenActivity extends Activity {
 
     // ==================== PROFILE FRAGMENT EVENT HANDLER ====================
 
-    public void logoutBtnPress(View view){
-        new AlertDialog.Builder(this)
-            .setMessage("Bạn chắc chắn muốn đăng xuất?")
-            .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    logout();
-                }
-            })
-            .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-                }
-            })
-            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-                }
-            })
-            .show();
-
-    }
-
     private void logout(){
 
         LocationService.isRunning = false;
@@ -273,7 +259,7 @@ public class MainScreenActivity extends Activity {
                 Thread thread = new Thread(){
                     public void run(){
                         try {
-                            String result = Multipart.multipartRequest(url, params, outputUri.getPath(), "proof", "image/jpeg");
+                            String result = MultipartHandler.multipartRequest(url, params, outputUri.getPath(), "proof", "image/jpeg");
                             Log.d("test", "Image Updated");
                         } catch (Exception e){
                             Log.d("test", e.toString());

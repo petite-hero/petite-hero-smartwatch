@@ -3,19 +3,17 @@ package hero.data;
 public class QuestDTO {
 
     String name;
-    String badgeName;
+    int badge;
     String detail;
-    String color;
 
     public QuestDTO(){
 
     }
 
-    public QuestDTO(String name, String badgeName, String detail, String color) {
+    public QuestDTO(String name, int badge, String detail) {
         this.name = name;
-        this.badgeName = badgeName;
+        this.badge = badge;
         this.detail = detail;
-        this.color = color;
     }
 
     public String getName() {
@@ -26,12 +24,12 @@ public class QuestDTO {
         this.name = name;
     }
 
-    public String getBadgeName() {
-        return badgeName;
+    public int getBadge() {
+        return badge;
     }
 
-    public void setBadgeName(String badgeName) {
-        this.badgeName = badgeName;
+    public void setBadge(int badge) {
+        this.badge = badge;
     }
 
     public String getDetail() {
@@ -40,13 +38,5 @@ public class QuestDTO {
 
     public void setDetail(String detail) {
         this.detail = detail;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }

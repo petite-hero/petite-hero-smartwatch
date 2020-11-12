@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.PaintDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import hero.data.QuestDTO;
 import hero.main.R;
+import hero.util.Util;
 
 public class QuestAdapter extends ArrayAdapter<QuestDTO> {
 
@@ -49,26 +51,29 @@ public class QuestAdapter extends ArrayAdapter<QuestDTO> {
         // SET LAYOUT ATTRIBUTES
 
         // set layout for FRONT FACE CONTAINER
-        PaintDrawable pd;
-        pd = new PaintDrawable(resource.getColor(R.color.colorTaskBackground));
-        pd.setCornerRadius(20);
-        questFrontFaceContainer.setBackground(pd);
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(resource.getColor(R.color.colorTaskBackground));
+        gd.setStroke(2, Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
+        gd.setCornerRadius(20);
+        questFrontFaceContainer.setBackground(gd);
 
         // set icon for badge
-        imvIconBadge.setImageResource(resource.getIdentifier(quest.getBadgeName(), "drawable", activity.getPackageName()));
+        imvIconBadge.setImageResource(resource.getIdentifier(Util.badgeIdToName(quest.getBadge()), "drawable", activity.getPackageName()));
 
         // set layout for left decoration
-        pd = new PaintDrawable(Color.parseColor(quest.getColor()));
+        PaintDrawable pd = new PaintDrawable(Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
         pd.setCornerRadii(new float[] {10,20,0,0,0,0,10,20});
         decorLeft.setBackground(pd);
 
         // set layout for BACK FACE CONTAINER
-        pd = new PaintDrawable(resource.getColor(R.color.colorTaskBackground));
-        pd.setCornerRadius(20);
-        questBackFaceContainer.setBackground(pd);
+        gd = new GradientDrawable();
+        gd.setColor(resource.getColor(R.color.colorTaskBackground));
+        gd.setStroke(2, Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
+        gd.setCornerRadius(20);
+        questBackFaceContainer.setBackground(gd);
 
         // set layout for left decoration
-        pd = new PaintDrawable(Color.parseColor(quest.getColor()));
+        pd = new PaintDrawable(Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
         pd.setCornerRadii(new float[] {10,20,0,0,0,0,10,20});
         decorLeftBack.setBackground(pd);
 

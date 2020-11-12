@@ -20,7 +20,7 @@ public class TaskDAO extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE Task(id TEXT NOT NULL PRIMARY KEY, name TEXT, type TEXT, detail TEXT," +
+        String createTable = "CREATE TABLE Task(id INTEGER NOT NULL PRIMARY KEY, name TEXT, type TEXT, detail TEXT," +
                 "from_time INTEGER, to_time INTEGER, status TEXT)";
         db.execSQL(createTable);
     }
@@ -59,6 +59,7 @@ public class TaskDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT id, name, type, detail, from_time, to_time, status FROM Task ORDER BY from_time";
         Cursor cursor = db.rawQuery(sql, null);
+        Calendar now = Calendar.getInstance();
         while (cursor.moveToNext()) {
             long id = cursor.getLong(0);
             String name = cursor.getString(1);
@@ -69,9 +70,7 @@ public class TaskDAO extends SQLiteOpenHelper {
             Calendar toTime = Calendar.getInstance();
             toTime.setTimeInMillis(cursor.getLong(5));
             String status = cursor.getString(6);
-
-            if (Calendar.getInstance().getTimeInMillis() > fromTime.getTimeInMillis() &&
-                    Calendar.getInstance().getTimeInMillis() < toTime.getTimeInMillis()) {
+            if (now.getTimeInMillis() > fromTime.getTimeInMillis() && now.getTimeInMillis() < toTime.getTimeInMillis()) {
                 result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
                 break;
             }
@@ -86,6 +85,7 @@ public class TaskDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT id, name, type, detail, from_time, to_time, status FROM Task";
         Cursor cursor = db.rawQuery(sql, null);
+        Calendar now = Calendar.getInstance();
         while (cursor.moveToNext()) {
             long id = cursor.getLong(0);
             String name = cursor.getString(1);
@@ -96,8 +96,7 @@ public class TaskDAO extends SQLiteOpenHelper {
             Calendar toTime = Calendar.getInstance();
             toTime.setTimeInMillis(cursor.getLong(5));
             String status = cursor.getString(6);
-
-            if (Calendar.getInstance().getTimeInMillis() > toTime.getTimeInMillis())
+            if (now.getTimeInMillis() > toTime.getTimeInMillis())
                 result.add(new TaskDTO(id, name, type, detail, fromTime, toTime, status));
         }
         cursor.close();

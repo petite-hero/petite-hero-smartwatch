@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Multipart {
+public class MultipartHandler {
 
     public static String multipartRequest(String urlTo, Map<String, String> parmas, String filepath, String filefield, String fileMimeType) throws Exception {
 
@@ -47,7 +47,7 @@ public class Multipart {
 //            connection.setRequestMethod("POST");
             connection.setRequestMethod("PUT");
             connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
+            connection.setRequestProperty("User-Agent", "Android MultipartHandler HTTP Client 1.0");
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
             outputStream = new DataOutputStream(connection.getOutputStream());
