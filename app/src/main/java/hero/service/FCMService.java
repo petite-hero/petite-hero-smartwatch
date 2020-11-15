@@ -11,12 +11,18 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONObject;
+
+import java.util.Calendar;
 import java.util.Map;
 
 import hero.data.HttpDAO;
+import hero.data.TaskDAO;
+import hero.data.TaskDTO;
 import hero.main.MainScreenActivity;
 import hero.util.Noti;
 import hero.util.SPSupport;
+import hero.util.Util;
 
 public class FCMService extends FirebaseMessagingService {
 
@@ -37,6 +43,7 @@ public class FCMService extends FirebaseMessagingService {
         Map<String, String> noti = remoteMessage.getData();
         SPSupport spSupport = new SPSupport(this);
         HttpDAO httpDao = HttpDAO.getInstance(this, spSupport.get("ip_port"));
+        TaskDAO taskDao = TaskDAO.getInstance(this);
 
         Log.d("test", "noti received. type:" + noti.get("title"));
         Log.d("test", noti.get("body"));
@@ -76,7 +83,29 @@ public class FCMService extends FirebaseMessagingService {
             // get UPDATED TASK in the day
             if (noti.get("body").equals("updated-tasks")){
                 Log.d("test", "Silent noti: Update task");
-                httpDao.getTaskList(spSupport.get("child_id"));
+                Log.d("test", noti.get("data"));
+
+                try {
+                    JSONObject jsonObj = new JSONObject(noti.get("data"));
+                    long id = jsonObj.getLong("taskId");
+                    if (jsonObj.getString("status").equals("ASSIGNED")){
+                        //String name = jsonObj.getString("name");
+                        String name = "Tmp Name";
+                        String status = jsonObj.getString("status");
+                        Calendar fromTime = Util.timeStrToCalendar(jsonObj.getString("fromTime"));
+                        Calendar toTime = Util.timeStrToCalendar(jsonObj.getString("toTime"));
+                        String type = jsonObj.getString("type");
+                        String description = jsonObj.getString("description");
+                        taskDao.add(new TaskDTO(id, name, type, description, fromTime, toTime, status), null);
+                        Noti.createReminder(this, fromTime, "Bạn có nhiệm vụ mới: " + name, id);
+                    } else{
+                        taskDao.delete(id);
+                        Noti.cancelReminder(this, "", id);
+                    }
+                } catch (Exception e){
+                    Log.e("error", "Error while parsing JsonObject");
+                }
+
             }
 
         // ========== NORMAL NOTI LISTENER ==========

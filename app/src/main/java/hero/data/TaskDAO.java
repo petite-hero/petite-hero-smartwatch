@@ -36,21 +36,36 @@ public class TaskDAO extends SQLiteOpenHelper {
         return instance;
     }
 
+    public void add(TaskDTO dto, SQLiteDatabase db){
+        boolean isSaveList = false;
+        if (db == null) db = getWritableDatabase();
+        else isSaveList = true;
+        ContentValues values = new ContentValues();
+        values.put("id", dto.getId());
+        values.put("name", dto.getName());
+        values.put("type", dto.getType());
+        values.put("detail", dto.getDetail());
+        values.put("from_time", dto.getFromTime().getTimeInMillis());
+        values.put("to_time", dto.getToTime().getTimeInMillis());
+        values.put("status", dto.getStatus());
+        db.insert("Task", null, values);
+        if (!isSaveList) db.close();
+    }
+
     public void saveList(List<TaskDTO> taskList){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS Task");
         onCreate(db);
-        for (TaskDTO dto : taskList){
-            ContentValues values = new ContentValues();
-            values.put("id", dto.getId());
-            values.put("name", dto.getName());
-            values.put("type", dto.getType());
-            values.put("detail", dto.getDetail());
-            values.put("from_time", dto.getFromTime().getTimeInMillis());
-            values.put("to_time", dto.getToTime().getTimeInMillis());
-            values.put("status", dto.getStatus());
-            db.insert("Task", null, values);
-        }
+        for (TaskDTO dto : taskList)
+            add(dto, db);
+        db.close();
+    }
+
+    public void delete(long id){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Status", 0);
+        db.delete("Task", "id = " + id, null);
         db.close();
     }
 
@@ -102,14 +117,6 @@ public class TaskDAO extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return result;
-    }
-
-    public void delete(Context context, long id){
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("Status", 0);
-        db.delete("Task", "id = " + id, null);
-        db.close();
     }
 
 

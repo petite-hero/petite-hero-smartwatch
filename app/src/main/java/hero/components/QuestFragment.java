@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class QuestFragment extends Fragment {
     View view;
     ListView livQuest;
     GridView grvBadge;
+    TextView txtListPlaceholder;
 
 
     @Override
@@ -28,6 +30,7 @@ public class QuestFragment extends Fragment {
 
         livQuest = view.findViewById(R.id.questList);
         grvBadge = view.findViewById(R.id.badgeList);
+        txtListPlaceholder = view.findViewById(R.id.txtListPlaceholder);
 
         setData();
 
@@ -40,6 +43,8 @@ public class QuestFragment extends Fragment {
         if (questList.size() > 0) {
             livQuest.setAdapter(new QuestAdapter(getActivity(), 0, questList));
             livQuest.getLayoutParams().height = 170 * questList.size() - 10;
+        } else{
+            txtListPlaceholder.setVisibility(View.VISIBLE);
         }
     }
 

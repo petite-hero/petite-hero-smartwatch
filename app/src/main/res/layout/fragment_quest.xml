@@ -11,6 +11,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/txtListPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80px"
+                android:text="Bạn không có nhiệm vụ nào"
+                android:textAlignment="center"
+                android:textSize="16px"
+                android:textColor="@color/colorListPlaceholder"
+                android:visibility="gone"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0px"/>

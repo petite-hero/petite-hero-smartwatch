@@ -29,6 +29,7 @@ public class Util {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr.substring(0, 2)));
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeStr.substring(3, 5)));
+        calendar.set(Calendar.SECOND, 0);
         return calendar;
     }
 

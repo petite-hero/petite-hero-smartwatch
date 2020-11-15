@@ -12,6 +12,7 @@ import java.util.List;
 
 import hero.api.DataCallback;
 import hero.api.HttpRequestSender;
+import hero.util.SPSupport;
 import hero.util.Util;
 
 public class HttpDAO {
@@ -103,8 +104,32 @@ public class HttpDAO {
         ).execute();
     }
 
-    public void getChildInfo(String childId, DataCallback callback){
-        new HttpRequestSender("GET", ipPort+"/child/" + childId, null, callback).execute();
+    public void getChildInfo(String childId, final DataCallback callback){
+        new HttpRequestSender("GET", ipPort+"/child/" + childId, null, new DataCallback() {
+            @Override
+            public void onDataReceiving(JSONObject data) throws Exception {
+                JSONObject childObj = data.getJSONObject("data");
+                SPSupport spSupport = new SPSupport(context);
+                spSupport.set("child_name", childObj.getString("lastName") + " " + childObj.getString("firstName"));
+                spSupport.set("child_nickname", childObj.getString("nickName"));
+                spSupport.set("child_photo", childObj.getString("photo"));
+                callback.onDataReceiving(null);
+            }
+        }).execute();
+    }
+
+    public void getAllData(String childId, DataCallback callback){
+
+        // load task data
+        getTaskList(childId);
+        getBadgeList(childId);
+
+        // load quest data
+        getQuestList(childId);
+
+        // load profile data
+        getChildInfo(childId, callback);
+
     }
 
 }

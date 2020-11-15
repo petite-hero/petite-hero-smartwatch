@@ -33,6 +33,7 @@ import hero.api.MultipartHandler;
 import hero.components.ProfileFragment;
 import hero.components.QuestFragment;
 import hero.components.TaskFragment;
+import hero.data.TaskDAO;
 import hero.service.LocationService;
 
 public class MainScreenActivity extends Activity {
@@ -268,6 +269,7 @@ public class MainScreenActivity extends Activity {
                     }
                 };
                 thread.start();
+                TaskDAO.getInstance(this).delete(currentTaskId);
                 new AlertDialog.Builder(MainScreenActivity.this)
                         .setMessage("Ảnh đã được gửi đi")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {

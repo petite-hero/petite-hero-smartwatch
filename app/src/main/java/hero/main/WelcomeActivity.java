@@ -72,16 +72,8 @@ public class WelcomeActivity extends Activity{
 
         // TEST - skip login
         if (IS_SKIP_LOGIN) {
-            String childId = "3";
-            // set child id
-            spSupport.set("child_id", childId);
-            // open MainScreenActivity
-            Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
-            intent.putExtra("fragment", 2);
-            finish();
-            startActivity(intent);
-            // put device token to server
-            HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, null);
+            final String childId = "3";
+            handleLogin(childId);
         }
 
         // scan child id
@@ -101,38 +93,43 @@ public class WelcomeActivity extends Activity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-
-            // SAVE SCANNED CHILD ID & REPORT DEVICE TOKEN TO SERVER
-
-            // get ID
-            String scannedCode = result.getContents();
-            // save child ID to local
-            spSupport.set("child_id", scannedCode);
-
-            // save device token to server
-            if (FCMService.token == null || FCMService.token.length() == 0){
-                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
-                return;
-            }
-            HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(scannedCode, FCMService.token, new DataCallback() {
-                @Override
-                public void onDataReceiving(JSONObject data) throws Exception {
-                    if (data == null){
-                        Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
-                        return;
-                    } else{
-                        // MOVE TO MAIN ACTIVITY
-                        Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
-                        intent.putExtra("fragment", 2);
-                        finish();
-                        startActivity(intent);
-                        Toast.makeText(WelcomeActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
+        if(result != null) {  // handle QR scanned
+            final String scannedCode = result.getContents();
+            handleLogin(scannedCode);
         }
+    }
+
+    private void handleLogin(final String childId){
+
+        // SAVE SCANNED CHILD ID
+        spSupport.set("child_id", childId);
+
+        // REPORT DEVICE TOKEN TO SERVER
+        if (FCMService.token == null || FCMService.token.length() == 0){
+            Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, new DataCallback() {
+            @Override
+            public void onDataReceiving(JSONObject data) throws Exception {
+                if (data == null) Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+                else{
+                    // LOAD CHILD DATA
+                    HttpDAO.getInstance(WelcomeActivity.this, spSupport.get("ip_port")).getAllData(childId, new DataCallback() {
+                        @Override
+                        public void onDataReceiving(JSONObject data) throws Exception {
+                            // MOVE TO MAIN ACTIVITY
+                            Intent intent = new Intent(WelcomeActivity.this, MainScreenActivity.class);
+                            intent.putExtra("fragment", 2);
+                            finish();
+                            startActivity(intent);
+                            Toast.makeText(WelcomeActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
 }

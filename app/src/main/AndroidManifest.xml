@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="https"
+                    android:host="siara.cc"
+                    android:pathPrefix="/CrossCalc"/>
+            </intent-filter>
         </activity>
 
         <service
@@ -40,6 +50,16 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name="hero.util.AlarmIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name="hero.util.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
 
     </application>
 

@@ -1,7 +1,6 @@
 package hero.components;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -104,43 +103,19 @@ public class ProfileFragment extends Fragment {
         imvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                loadAllData();
-                return true;
+            HttpDAO.getInstance(ProfileFragment.this.getActivity(), spSupport.get("ip_port")).getAllData(spSupport.get("child_id"), new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    txtName.setText(spSupport.get("child_name"));
+                    txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
+                    setAvatar();
+                    Toast.makeText(getActivity(), "Load thành công", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            return true;
             }
         });
-    }
-
-    private void loadAllData(){
-
-        Context context = getActivity();
-        String ipPort = spSupport.get("ip_port");
-        String childId = spSupport.get("child_id");
-        HttpDAO httpDao = HttpDAO.getInstance(context, ipPort);
-
-        // load task data
-        httpDao.getTaskList(childId);
-        httpDao.getBadgeList(childId);
-
-        // load quest data
-        httpDao.getQuestList(childId);
-
-        // load profile data
-        httpDao.getChildInfo(childId, new DataCallback() {
-            @Override
-            public void onDataReceiving(JSONObject data) throws Exception {
-                JSONObject childObj = data.getJSONObject("data");
-                spSupport.set("child_name", childObj.getString("firstName") + " " + childObj.getString("lastName"));
-                spSupport.set("child_nickname", childObj.getString("nickName"));
-                spSupport.set("child_photo", childObj.getString("photo"));
-                // show to UI
-                txtName.setText(spSupport.get("child_name"));
-                txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
-                setAvatar();
-            }
-        });
-
-        Toast.makeText(context, "Load thành công!", Toast.LENGTH_LONG).show();
-
     }
 
 }

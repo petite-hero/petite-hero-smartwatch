@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class TaskFragment extends Fragment {
     View view;
     ListView livTaskActive, livTaskLate;
     View taskListSeparator;
+    TextView txtListPlaceholder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class TaskFragment extends Fragment {
         livTaskActive = view.findViewById(R.id.taskListActive);
         livTaskLate = view.findViewById(R.id.taskListLate);
         taskListSeparator = view.findViewById(R.id.taskListSeparator);
+        txtListPlaceholder = view.findViewById(R.id.txtListPlaceholder);
 
         applyTaskList();
 
@@ -36,17 +39,20 @@ public class TaskFragment extends Fragment {
 
     private void applyTaskList(){
 
-        List<TaskDTO> taskListActive = TaskDAO.getInstance(getActivity()).getActiveTask();
-        List<TaskDTO> taskListLate = TaskDAO.getInstance(getActivity()).getListLate();
+        TaskDAO taskDao = TaskDAO.getInstance(getActivity());
+        List<TaskDTO> taskListActive = taskDao.getActiveTask();
+        List<TaskDTO> taskListLate = taskDao.getListLate();
 
         if (taskListActive.size() > 0) livTaskActive.setAdapter(new TaskAdapter(getActivity(), 0, taskListActive, true));
-        if (taskListLate.size() > 0) livTaskLate.setAdapter(new TaskAdapter(getActivity(), 0, taskListLate, false));
-        livTaskLate.getLayoutParams().height = 170*taskListLate.size() - 10;
+        else livTaskActive.setVisibility(View.GONE);
 
-        if (taskListActive.size() == 0) livTaskActive.setVisibility(View.GONE);
-        else livTaskActive.setVisibility(View.VISIBLE);
+        if (taskListLate.size() > 0){
+            livTaskLate.setAdapter(new TaskAdapter(getActivity(), 0, taskListLate, false));
+            livTaskLate.getLayoutParams().height = 170*taskListLate.size() - 10;
+        } else livTaskLate.setVisibility(View.GONE);
+
         if (taskListActive.size() > 0 && taskListLate.size() > 0) taskListSeparator.setVisibility(View.VISIBLE);
-        else taskListSeparator.setVisibility(View.GONE);
+        if (taskListActive.size() == 0 && taskListLate.size() == 0) txtListPlaceholder.setVisibility(View.VISIBLE);
 
     }
 

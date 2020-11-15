@@ -22,5 +22,6 @@
     <color name="colorTaskCategorySkill">#07be8a</color>
     <color name="colorTaskBackground">#ffffff</color>
     <color name="colorTaskLate">#656565</color>
+    <color name="colorListPlaceholder">#909090</color>
 
 </resources>
