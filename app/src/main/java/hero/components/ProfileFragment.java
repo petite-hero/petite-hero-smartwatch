@@ -26,6 +26,7 @@ import java.util.List;
 import hero.api.DataCallback;
 import hero.data.HttpDAO;
 import hero.data.QuestDAO;
+import hero.data.QuestDTO;
 import hero.main.R;
 import hero.util.SPSupport;
 
@@ -90,10 +91,14 @@ public class ProfileFragment extends Fragment {
         txtName.setText(spSupport.get("child_name"));
         txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
 
-        List<Integer> badgeList = QuestDAO.getInstance(getActivity()).getListBadge();
+        List<QuestDTO> badgeList = QuestDAO.getInstance(getActivity()).getList("done");
         if (badgeList.size() > 0) {
             grvBadge.setAdapter(new BadgeAdapter(getActivity(), 0, badgeList));
         }
+//        List<Integer> badgeList = QuestDAO.getInstance(getActivity()).getListBadge();
+//        if (badgeList.size() > 0) {
+//            grvBadge.setAdapter(new BadgeAdapter(getActivity(), 0, badgeList));
+//        }
 
     }
 

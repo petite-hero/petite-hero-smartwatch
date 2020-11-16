@@ -63,8 +63,6 @@ public class TaskDAO extends SQLiteOpenHelper {
 
     public void delete(long id){
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("Status", 0);
         db.delete("Task", "id = " + id, null);
         db.close();
     }
@@ -118,48 +116,5 @@ public class TaskDAO extends SQLiteOpenHelper {
         db.close();
         return result;
     }
-
-
-
-//
-//    public BookDTO getDataDetail(Context context, String id) {
-//        BookDTO result = null;
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        String sql = "SELECT BookName, Description, TimeOfCreate, Status, Price FROM Book WHERE BookId = " + id;
-//        Cursor cursor = db.rawQuery(sql, null);
-//        if (cursor.moveToNext()) {
-//            String name = cursor.getString(0);
-//            String description = cursor.getString(1);
-//            String timeOfCreate = cursor.getString(2);
-//            boolean status = cursor.getInt(3) == 1;
-//            float price = cursor.getFloat(4);
-//            result = new BookDTO(id, name, description, timeOfCreate, status, price);
-//        }
-//        cursor.close();
-//        db.close();
-//        return result;
-//    }
-//
-//    public void disable(Context context, String id){
-//        SQLiteDatabase db = getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("Status", 0);
-//        db.update("Book", values, "BookId = " + id, null);
-//        db.close();
-//    }
-//
-//    public boolean add(Context context, BookDTO dto){
-//        SQLiteDatabase db = getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("BookId", dto.getId());
-//        values.put("BookName", dto.getName());
-//        values.put("Description", dto.getDescription());
-//        values.put("TimeOfCreate", dto.getTimeOfCreate());
-//        values.put("Status", dto.isStatus() ? 1 : 0);
-//        values.put("Price", dto.getPrice());
-//        int success = (int) db.insert("Book", null, values);
-//        db.close();
-//        return success != -1;
-//    }
 
 }

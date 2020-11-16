@@ -19,7 +19,7 @@ public class QuestDAO extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE Quest(id INTEGER NOT NULL PRIMARY KEY, name TEXT, detail TEXT, badge INTEGER)";
+        String createTable = "CREATE TABLE Quest(id INTEGER NOT NULL PRIMARY KEY, name TEXT, detail TEXT, badge INTEGER, title TEXT, status TEXT)";
         db.execSQL(createTable);
     }
 
@@ -34,63 +34,77 @@ public class QuestDAO extends SQLiteOpenHelper {
         return instance;
     }
 
+    public void add(QuestDTO dto, SQLiteDatabase db){
+        boolean isSaveList = false;
+        if (db == null) db = getWritableDatabase();
+        else isSaveList = true;
+        ContentValues values = new ContentValues();
+        values.put("id", dto.getId());
+        values.put("name", dto.getName());
+        values.put("detail", dto.getDetail());
+        values.put("badge", dto.getBadge());
+        values.put("title", dto.getTitle());
+        values.put("status", dto.getStatus());
+        db.insert("Quest", null, values);
+        if (!isSaveList) db.close();
+    }
+
     public void saveList(List<QuestDTO> questList){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS Quest");
         onCreate(db);
-        int count = 0;
         for (QuestDTO dto : questList){
-            ContentValues values = new ContentValues();
-            values.put("id", count);
-            values.put("name", dto.getName());
-            values.put("detail", dto.getDetail());
-            values.put("badge", dto.getBadge());
-            db.insert("Quest", null, values);
-            count++;
+            add(dto, db);
         }
         db.close();
     }
 
-    public List getList() {
+    public void delete(long id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("Quest", "id = " + id, null);
+        db.close();
+    }
+
+    public void finish(long id){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", "done");
+        db.update("Quest", values, "id = " + id, null);
+        db.close();
+    }
+
+    public List getList(String status) {
         List<QuestDTO> result = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT name, detail, badge FROM Quest ORDER BY id DESC";
+        String sql = "SELECT id, name, detail, badge, title FROM Quest WHERE status = '" + status + "' ORDER BY id DESC";
         Cursor cursor = db.rawQuery(sql, null);
+        int count = 0;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String detail = cursor.getString(1);
-            int badge = cursor.getInt(2);
-            result.add(new QuestDTO(name, badge, detail));
+            long id = cursor.getLong(0);
+            String name = cursor.getString(1);
+            String detail = cursor.getString(2);
+            int badge = cursor.getInt(3);
+            String title = cursor.getString(4);
+            result.add(new QuestDTO(id, name, badge, detail, title, status));
+            count++;
+            if (status.equals("done") && count == 6) break;
         }
         cursor.close();
         db.close();
         return result;
     }
 
-    public void saveListBadge(List<Integer> badgeList){
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS Badge");
-        String createTable = "CREATE TABLE Badge(id INTEGER NOT NULL PRIMARY KEY, badge INTEGER)";
-        db.execSQL(createTable);
-        int count = 0;
-        for (int badge : badgeList){
-            ContentValues values = new ContentValues();
-            values.put("id", count);
-            values.put("badge", badge);
-            db.insert("Badge", null, values);
-            count++;
-        }
-        db.close();
-    }
-
-    public List getListBadge() {
-        List<Integer> result = new ArrayList<>();
+    public QuestDTO get(long id) {
+        QuestDTO result = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT badge FROM Badge ORDER BY id DESC";
+        String sql = "SELECT name, detail, badge, title FROM Quest WHERE id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            int badge = cursor.getInt(0);
-            result.add(badge);
+        if (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            String detail = cursor.getString(1);
+            int badge = cursor.getInt(2);
+            String title = cursor.getString(3);
+            result = new QuestDTO(id, name, badge, detail, title, "");
         }
         cursor.close();
         db.close();

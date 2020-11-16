@@ -45,6 +45,7 @@ public class QuestAdapter extends ArrayAdapter<QuestDTO> {
         TextView txtName = vi.findViewById(R.id.txtName);
         View decorLeft = vi.findViewById(R.id.decorLeft);
         TextView txtDetail = vi.findViewById(R.id.txtDetail);
+        ImageView imvIconBadgeBack = vi.findViewById(R.id.imvIconBadgeBack);
         View decorLeftBack = vi.findViewById(R.id.decorLeftBack);
 
 
@@ -59,11 +60,15 @@ public class QuestAdapter extends ArrayAdapter<QuestDTO> {
 
         // set icon for badge
         imvIconBadge.setImageResource(resource.getIdentifier(Util.badgeIdToName(quest.getBadge()), "drawable", activity.getPackageName()));
+        imvIconBadgeBack.setImageResource(resource.getIdentifier(Util.badgeIdToName(quest.getBadge()), "drawable", activity.getPackageName()));
 
         // set layout for left decoration
         PaintDrawable pd = new PaintDrawable(Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
         pd.setCornerRadii(new float[] {10,20,0,0,0,0,10,20});
         decorLeft.setBackground(pd);
+
+        // set layout for text
+        txtName.setTextColor(Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
 
         // set layout for BACK FACE CONTAINER
         gd = new GradientDrawable();

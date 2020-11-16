@@ -14,13 +14,13 @@
             android:layout_width="40px"
             android:layout_height="40px"
             android:layout_marginTop="10px"
-            android:layout_marginLeft="24px"
+            android:layout_marginLeft="28px"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="140px"
-            android:layout_height="70px"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10px"
             android:layout_marginRight="20px"
             android:layout_alignParentTop="true"
@@ -29,27 +29,29 @@
                 android:id="@+id/txtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16px"/>
+                android:textSize="16px"
+                android:textColor="@android:color/black"/>
             <TextView
                 android:id="@+id/txtNickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12px"/>
+                android:textSize="12px"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
     </RelativeLayout>
 
     <!-- badges view -->
     <RelativeLayout
         android:layout_width="240px"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10px">
         <GridView
             android:id="@+id/badgeList"
             android:layout_width="wrap_content"
             android:layout_height="140px"
-            android:layout_marginLeft="24px"
-            android:layout_marginRight="24px"
-            android:columnWidth="48px"
-            android:horizontalSpacing="24px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="19px"
+            android:columnWidth="67px"
             android:verticalSpacing="10px"
             android:numColumns="3"/>
     </RelativeLayout>

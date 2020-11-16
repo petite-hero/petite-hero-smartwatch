@@ -39,7 +39,7 @@ public class QuestFragment extends Fragment {
     }
 
     private void setData(){
-        List<QuestDTO> questList = QuestDAO.getInstance(getActivity()).getList();
+        List<QuestDTO> questList = QuestDAO.getInstance(getActivity()).getList("assigned");
         if (questList.size() > 0) {
             livQuest.setAdapter(new QuestAdapter(getActivity(), 0, questList));
             livQuest.getLayoutParams().height = 170 * questList.size() - 10;

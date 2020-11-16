@@ -82,8 +82,12 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         if (this.isActive) imvIconTaskType.setColorFilter(resource.getColor(colorId));
         else imvIconTaskType.setColorFilter(resource.getColor(R.color.colorTaskLate));
 
-        // set layout for "To" text
-        if (!this.isActive) txtTo.setTextColor(resource.getColor(R.color.colorTaskLate));
+        // set layout for texts
+        if (!this.isActive){
+            txtName.setTextColor(resource.getColor(R.color.colorTaskLate));
+            txtTo.setTextColor(resource.getColor(R.color.colorTaskLate));
+            txtDetail.setTextColor(resource.getColor(R.color.colorTaskLate));
+        }
 
         // set layout for left decoration
         PaintDrawable pd;

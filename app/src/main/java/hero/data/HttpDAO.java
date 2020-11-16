@@ -75,10 +75,12 @@ public class HttpDAO {
                         List<QuestDTO> questList = new ArrayList<>();
                         for (int i = 0; i < jsonArr.length(); i++) {
                             JSONObject jsonObj = jsonArr.getJSONObject(i);
+                            long id = jsonObj.getLong("questId");
                             String name = jsonObj.getString("name");
                             int badge = jsonObj.getInt("reward");
                             String description = jsonObj.getString("description");
-                            questList.add(new QuestDTO(name, badge, description));
+                            String title = "Người nhện";
+                            questList.add(new QuestDTO(id, name, badge, description, title, "assigned"));
                         }
                         QuestDAO.getInstance(context).saveList(questList);
                     }
@@ -92,13 +94,16 @@ public class HttpDAO {
                     @Override
                     public void onDataReceiving(JSONObject data) throws Exception {
                         JSONArray jsonArr = data.getJSONArray("data");
-                        List<Integer> badgeList = new ArrayList<>();
+                        QuestDAO questDao = QuestDAO.getInstance(context);
                         for (int i = 0; i < jsonArr.length(); i++) {
                             JSONObject jsonObj = jsonArr.getJSONObject(i);
+                            long id = jsonObj.getLong("questId");
+                            String name = jsonObj.getString("name");
                             int badge = jsonObj.getInt("reward");
-                            badgeList.add(badge);
+                            String description = jsonObj.getString("description");
+                            String title = "Người nhện";
+                            questDao.add(new QuestDTO(id, name, badge, description, title, "done"), null);
                         }
-                        QuestDAO.getInstance(context).saveListBadge(badgeList);
                     }
                 }
         ).execute();
@@ -119,17 +124,10 @@ public class HttpDAO {
     }
 
     public void getAllData(String childId, DataCallback callback){
-
-        // load task data
         getTaskList(childId);
-        getBadgeList(childId);
-
-        // load quest data
         getQuestList(childId);
-
-        // load profile data
+        getBadgeList(childId);
         getChildInfo(childId, callback);
-
     }
 
 }

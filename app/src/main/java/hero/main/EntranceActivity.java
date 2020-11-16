@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import hero.data.HttpDAO;
+import hero.util.SPSupport;
+
 public class EntranceActivity extends Activity {
 
     private static final String CHILD_ID = "1";
-    private static final String IP_PORT = "http://192.168.1.6:8080";
+    private static final String IP_PORT = "http://192.168.1.122:8080";
     private static final int INTERVAL = 5000;
 
     @Override
@@ -17,9 +20,9 @@ public class EntranceActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        SharedPreferences ref = PreferenceManager.getDefaultSharedPreferences(this);
+        SPSupport spSupport = new SPSupport(this);
         Intent intent;
-        if (ref.getString("child_id", null) == null) intent = new Intent(this, WelcomeActivity.class);
+        if (spSupport.get("child_id") == null) intent = new Intent(this, WelcomeActivity.class);
         else intent = new Intent(this, MainScreenActivity.class);
         finish();
         startActivity(intent);

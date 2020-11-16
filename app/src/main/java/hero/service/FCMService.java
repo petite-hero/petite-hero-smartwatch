@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Map;
 
 import hero.data.HttpDAO;
+import hero.data.QuestDAO;
+import hero.data.QuestDTO;
 import hero.data.TaskDAO;
 import hero.data.TaskDTO;
 import hero.main.MainScreenActivity;
@@ -44,9 +46,9 @@ public class FCMService extends FirebaseMessagingService {
         SPSupport spSupport = new SPSupport(this);
         HttpDAO httpDao = HttpDAO.getInstance(this, spSupport.get("ip_port"));
         TaskDAO taskDao = TaskDAO.getInstance(this);
+        QuestDAO questDao = QuestDAO.getInstance(this);
 
-        Log.d("test", "noti received. type:" + noti.get("title"));
-        Log.d("test", noti.get("body"));
+        Log.d("test", "Noti received | Type:" + noti.get("title") + " | Body: " + noti.get("body"));
         // Log.d("test", "====> Here is title from Data: " + remoteMessage.getData().get("title"));
         // Log.d("test", "====> Here is body from Data: " + remoteMessage.getData().get("body"));
 
@@ -82,22 +84,18 @@ public class FCMService extends FirebaseMessagingService {
 
             // get UPDATED TASK in the day
             if (noti.get("body").equals("updated-tasks")){
-                Log.d("test", "Silent noti: Update task");
-                Log.d("test", noti.get("data"));
-
                 try {
                     JSONObject jsonObj = new JSONObject(noti.get("data"));
                     long id = jsonObj.getLong("taskId");
                     if (jsonObj.getString("status").equals("ASSIGNED")){
-                        //String name = jsonObj.getString("name");
-                        String name = "Tmp Name";
+                        String name = jsonObj.getString("name");
                         String status = jsonObj.getString("status");
                         Calendar fromTime = Util.timeStrToCalendar(jsonObj.getString("fromTime"));
                         Calendar toTime = Util.timeStrToCalendar(jsonObj.getString("toTime"));
                         String type = jsonObj.getString("type");
                         String description = jsonObj.getString("description");
                         taskDao.add(new TaskDTO(id, name, type, description, fromTime, toTime, status), null);
-                        Noti.createReminder(this, fromTime, "Bạn có nhiệm vụ mới: " + name, id);
+                        Noti.createReminder(this, fromTime, "Con có công việc mới: " + name, id);
                     } else{
                         taskDao.delete(id);
                         Noti.cancelReminder(this, "", id);
@@ -105,26 +103,45 @@ public class FCMService extends FirebaseMessagingService {
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
-
             }
+
+            // get updated FAILED QUEST
+            // wait 4 Duong
 
         // ========== NORMAL NOTI LISTENER ==========
         } else {
 
             // Log.d("test", "====> Here is title from Notification: " + remoteMessage.getNotification().getTitle());
             // Log.d("test", "====> Here is body from Notification: " + remoteMessage.getNotification().getBody());
+            Log.d("test", noti.get("data"));
 
             // get UPDATED QUEST
             if (noti.get("body").contains("nhiệm vụ mới")){
-                Noti.createNoti(this, MainScreenActivity.class, 1, "Bạn có nhiệm vụ mới");
-                httpDao.getQuestList(spSupport.get("child_id"));
+                try {
+                    JSONObject jsonObj = new JSONObject(noti.get("data"));
+                    long id = jsonObj.getLong("questId");
+                    String name = jsonObj.getString("name");
+                    String description = jsonObj.getString("description");
+                    int badge = jsonObj.getInt("reward");
+                    String title = "Người nhện";
+                    questDao.add(new QuestDTO(id, name, badge, description, title, "assigned"), null);
+                    Noti.createNoti(this, MainScreenActivity.class, 1, "Con có nhiệm vụ mới: " + name);
+                } catch (Exception e){
+                    Log.e("error", "Error while parsing JsonObject");
+                }
             }
 
             // get SUCCEEDED QUEST
             if (noti.get("body").contains("đã thành công")){
-                Noti.createNoti(this, MainScreenActivity.class, 2, "Bạn đã hoàn thành nhiệm vụ");
-                httpDao.getQuestList(spSupport.get("child_id"));
-                httpDao.getBadgeList(spSupport.get("child_id"));
+                try{
+                    JSONObject jsonObj = new JSONObject(noti.get("data"));
+                    long id = jsonObj.getLong("questId");
+                    String name = questDao.get(id).getName();
+                    questDao.finish(id);
+                    Noti.createNoti(this, MainScreenActivity.class, 2, "Con đã hoàn thành nhiệm vụ: " + name);
+                } catch (Exception e){
+                    Log.e("error", "Error while parsing JsonObject");
+                }
             }
 
         }
