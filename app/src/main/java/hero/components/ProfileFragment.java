@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import org.json.JSONObject;
 
@@ -52,6 +55,7 @@ public class ProfileFragment extends Fragment {
         spSupport = new SPSupport(getActivity());
 
         setAvatar();
+        setLayout();
         setData();
 
         setHiddenLoadData();
@@ -86,6 +90,13 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void setLayout(){
+        // set font for text views
+        Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.acumin);
+        txtName.setTypeface(typeface);
+        txtNickname.setTypeface(typeface);
+    }
+
     private void setData(){
 
         txtName.setText(spSupport.get("child_name"));
@@ -95,10 +106,6 @@ public class ProfileFragment extends Fragment {
         if (badgeList.size() > 0) {
             grvBadge.setAdapter(new BadgeAdapter(getActivity(), 0, badgeList));
         }
-//        List<Integer> badgeList = QuestDAO.getInstance(getActivity()).getListBadge();
-//        if (badgeList.size() > 0) {
-//            grvBadge.setAdapter(new BadgeAdapter(getActivity(), 0, badgeList));
-//        }
 
     }
 

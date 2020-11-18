@@ -38,7 +38,7 @@ import hero.service.LocationService;
 
 public class MainScreenActivity extends Activity {
 
-    // constances
+    // constance
     private static final int[] ICON_NAV_LIST = {R.drawable.task, R.drawable.quest, R.drawable.profile};
     private static final int[] ICON_NAV_ACTIVE_LIST = {R.drawable.task_active, R.drawable.quest_active, R.drawable.profile_active};
     private static final int CAPTURE_REQUEST = 123;

@@ -1,12 +1,15 @@
 package hero.components;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
 
@@ -31,10 +34,16 @@ public class TaskFragment extends Fragment {
         taskListSeparator = view.findViewById(R.id.taskListSeparator);
         txtListPlaceholder = view.findViewById(R.id.txtListPlaceholder);
 
+        setLayout();
         applyTaskList();
 
         return view;
 
+    }
+
+    private void setLayout(){
+        // set font for text views
+        txtListPlaceholder.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.acumin));
     }
 
     private void applyTaskList(){

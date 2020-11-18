@@ -20,7 +20,7 @@ import hero.util.SPSupport;
 
 public class WelcomeActivity extends Activity{
 
-    private static final boolean IS_SKIP_LOGIN = true;  // testing
+    private static final boolean IS_SKIP_LOGIN = false;  // testing
 
     Button btnScanQR;
     SPSupport spSupport;

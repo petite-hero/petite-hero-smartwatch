@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.List;
 
 import hero.data.QuestDTO;
@@ -40,6 +42,8 @@ public class BadgeAdapter extends ArrayAdapter<QuestDTO> {
         TextView txtTitle = vi.findViewById(R.id.txtTitle);
 
         // SET LAYOUT ATTRIBUTES
+
+        // badge image
         imvIconBadge.setImageResource(resource.getIdentifier(Util.badgeIdToName(badgeList.get(position).getBadge()), "drawable", activity.getPackageName()));
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(Color.parseColor("#f7f7f7"));
@@ -47,7 +51,11 @@ public class BadgeAdapter extends ArrayAdapter<QuestDTO> {
         gd.setCornerRadius(25);
         imvIconBadge.setBackground(gd);
 
-        txtTitle.setText(badgeList.get(position).getTitle());
+        // badge title
+        String[] tmpTitleList = new String[] {"Người nhện", "Dũng sĩ", "Thần đồng", "Thợ lặn", "Siêng năng", "Chăm làm"};
+//        txtTitle.setText(badgeList.get(position).getTitle());
+        txtTitle.setText(tmpTitleList[position]);
+        txtTitle.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
 
         // apply to view
         return vi;

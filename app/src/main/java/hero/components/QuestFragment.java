@@ -9,6 +9,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.List;
 
 import hero.data.QuestDAO;
@@ -32,10 +34,16 @@ public class QuestFragment extends Fragment {
         grvBadge = view.findViewById(R.id.badgeList);
         txtListPlaceholder = view.findViewById(R.id.txtListPlaceholder);
 
+        setLayout();
         setData();
 
         return view;
 
+    }
+
+    private void setLayout(){
+        // set font for text views
+        txtListPlaceholder.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.acumin));
     }
 
     private void setData(){
