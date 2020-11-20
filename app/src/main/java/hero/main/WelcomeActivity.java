@@ -6,7 +6,10 @@ import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -22,6 +25,7 @@ public class WelcomeActivity extends Activity{
 
     private static final boolean IS_SKIP_LOGIN = false;  // testing
 
+    TextView txtWelcome;
     Button btnScanQR;
     SPSupport spSupport;
     FCMService fcmService;
@@ -32,6 +36,7 @@ public class WelcomeActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        txtWelcome = findViewById(R.id.txtWelcome);
         btnScanQR = findViewById(R.id.btnScanQR);
         spSupport = new SPSupport(this);
         fcmService = new FCMService();
@@ -43,10 +48,14 @@ public class WelcomeActivity extends Activity{
 
     private void initLayout(){
 
+        // welcome text
+        txtWelcome.setTypeface(ResourcesCompat.getFont(this, R.font.montserrat_b));
+
         // scan button
         PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
         pd.setCornerRadius(20);
         btnScanQR.setBackground(pd);
+        btnScanQR.setTypeface(ResourcesCompat.getFont(this, R.font.acumin));
 
         // listener to open hidden developer mode
         btnScanQR.setOnLongClickListener(new View.OnLongClickListener() {
@@ -109,6 +118,9 @@ public class WelcomeActivity extends Activity{
             Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
             return;
         }
+        // Log.d("test", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        // Log.d("test", Build.MANUFACTURER  + " " + Build.MODEL);
+
         HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, new DataCallback() {
             @Override
             public void onDataReceiving(JSONObject data) throws Exception {

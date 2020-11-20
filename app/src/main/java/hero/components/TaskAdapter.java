@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.List;
 
 import hero.data.TaskDTO;
@@ -88,6 +90,9 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
             txtTo.setTextColor(resource.getColor(R.color.colorTaskLate));
             txtDetail.setTextColor(resource.getColor(R.color.colorTaskLate));
         }
+        txtName.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin_b));
+        txtTo.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
+        txtDetail.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
 
         // set layout for left decoration
         PaintDrawable pd;

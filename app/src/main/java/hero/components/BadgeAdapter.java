@@ -47,14 +47,14 @@ public class BadgeAdapter extends ArrayAdapter<QuestDTO> {
         imvIconBadge.setImageResource(resource.getIdentifier(Util.badgeIdToName(badgeList.get(position).getBadge()), "drawable", activity.getPackageName()));
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(Color.parseColor("#f7f7f7"));
-//        gd.setStroke(2, resource.getColor(R.color.colorLightCyan));
+        // gd.setStroke(2, resource.getColor(R.color.colorLightCyan));
         gd.setCornerRadius(25);
         imvIconBadge.setBackground(gd);
 
         // badge title
-        String[] tmpTitleList = new String[] {"Người nhện", "Dũng sĩ", "Thần đồng", "Thợ lặn", "Siêng năng", "Chăm làm"};
-//        txtTitle.setText(badgeList.get(position).getTitle());
-        txtTitle.setText(tmpTitleList[position]);
+//        String[] tmpTitleList = new String[] {"Người nhện", "Dũng sĩ", "Thần đồng", "Thợ lặn", "Siêng năng", "Chăm làm"};
+//        txtTitle.setText(tmpTitleList[position]);
+        txtTitle.setText(badgeList.get(position).getTitle());
         txtTitle.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
 
         // apply to view

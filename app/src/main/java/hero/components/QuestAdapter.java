@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.List;
 
 import hero.data.QuestDTO;
@@ -69,6 +71,8 @@ public class QuestAdapter extends ArrayAdapter<QuestDTO> {
 
         // set layout for text
         txtName.setTextColor(Color.parseColor(Util.BADGE_COLORS[quest.getBadge()-1]));
+        txtName.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin_b));
+        txtDetail.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
 
         // set layout for BACK FACE CONTAINER
         gd = new GradientDrawable();

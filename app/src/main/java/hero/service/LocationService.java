@@ -3,13 +3,11 @@ package hero.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -19,89 +17,73 @@ import java.util.Calendar;
 
 import hero.api.DataCallback;
 import hero.api.HttpRequestSender;
+import hero.util.SPSupport;
 
 public class LocationService extends Service {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
-    SharedPreferences ref;
-
-//    private static boolean isSafe(Location location){
-//        if (location.getLatitude() <= 10.8355) return false;
-//        return true;
-//    }
+    private static boolean isUsingNetwork = false;
+    SPSupport spSupport;
 
     protected LocationManager locationManager;
-    LocationListener locationListenerGps = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            if (!isRunning){
-                stopSelf();
-                return;
-            }
-            handleLocationChanged(location, "gps");
-        }
-        public void onProviderDisabled(String provider) {}
-        public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-    };
-    LocationListener locationListenerNetwork = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            if (!isRunning){
-                stopSelf();
-                return;
-            }
-            handleLocationChanged(location, "network");
-        }
-        public void onProviderDisabled(String provider) {}
-        public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-    };
-
-    private void handleLocationChanged(Location location, String provider){
-        JSONObject locationJsonObj = new JSONObject();
-        try {
-            Calendar calendarNow = Calendar.getInstance();
-            locationJsonObj.put("child", ref.getString("child_id", null))
-                    .put("latitude", location.getLatitude())
-                    .put("longitude", location.getLongitude())
-                    .put("provider", provider)
-                    .put("status", hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow))
-                    .put("time", calendarNow.getTimeInMillis());
-//            Log.d("test", "gps updated, emergency: " + isEmergency);
-            Log.d("test", "gps updated, status: " + hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow));
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
-        new HttpRequestSender("POST", ref.getString("ip_port", null)+"/location/current-location/"+isEmergency, locationJsonObj.toString(),
-//        new HttpRequestSender("POST", ref.getString("ip_port", null) + "/location/current-location/true", locationJsonObj.toString(),
-            new DataCallback() {
-                @Override
-                public void onDataReceiving(JSONObject data) throws Exception {
-                    Log.d("test", "Request response | Location service: " + data.toString());
-                }
-            }
-        ).execute();
-    }
+    LocationListener locationListenerGps;
+    LocationListener locationListenerNetwork;
 
     @Override
     public void onCreate() {
+
         super.onCreate();
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        ref = PreferenceManager.getDefaultSharedPreferences(this);
+        spSupport =  new SPSupport(this);
+
+        // GPS listener
+        locationListenerGps = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                if (!isRunning){
+                    LocationService.this.stopSelf();
+                    return;
+                }
+                handleLocationChanged(location, "gps");
+            }
+            public void onProviderDisabled(String provider) {}
+            public void onProviderEnabled(String provider) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        };
+        // network listener
+        locationListenerNetwork = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                if (!isRunning){
+                    LocationService.this.stopSelf();
+                    return;
+                }
+                handleLocationChanged(location, "network");
+            }
+            public void onProviderDisabled(String provider) {}
+            public void onProviderEnabled(String provider) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        };
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // start GPS listener
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, ref.getInt("report_interval", 0), 0, locationListenerGps);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, Integer.parseInt(spSupport.get("report_interval")), 0, locationListenerGps);
         } catch (SecurityException e){
             e.printStackTrace();
         }
-//        try{
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, ref.getInt("report_interval", 0), 0, locationListenerNetwork);
-//        } catch (SecurityException e){
-//            e.printStackTrace();
-//        }
+        // start network listener
+        if (isUsingNetwork) {
+            try {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, Integer.parseInt(spSupport.get("report_interval")), 0, locationListenerNetwork);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        // set isRunning
         isRunning = true;
         return START_STICKY;
     }
@@ -114,8 +96,44 @@ public class LocationService extends Service {
     @Override
     public void onDestroy() {
         locationManager.removeUpdates(locationListenerGps);
-//        locationManager.removeUpdates(locationListenerNetwork);
+        if (isUsingNetwork) locationManager.removeUpdates(locationListenerNetwork);
         isRunning = false;
+    }
+
+
+//        private static boolean isSafe(Location location){
+//        if (location.getLatitude() <= 10.8355) return false;
+//        return true;
+//    }
+
+    private void handleLocationChanged(Location location, String provider){
+
+        // build json object
+        Calendar calendarNow = Calendar.getInstance();
+        boolean status = hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow);
+        JSONObject locationJsonObj = new JSONObject();
+        try {
+            locationJsonObj.put("child", spSupport.get("child_id"))
+                    .put("latitude", location.getLatitude())
+                    .put("longitude", location.getLongitude())
+                    .put("provider", provider)
+                    .put("status", status)
+                    .put("time", calendarNow.getTimeInMillis());
+            Log.d("test", "Location updated | Provider: " + provider + " | Status: " + status + " | Emergency: " + isEmergency);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        // send POST request
+        new HttpRequestSender("POST", spSupport.get("ip_port")+"/location/current-location/"+isEmergency, locationJsonObj.toString(),
+            new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    Log.d("test", "Request response | Location service: " + data.toString());
+                }
+            }
+        ).execute();
+
     }
 
 }

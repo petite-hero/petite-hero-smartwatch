@@ -30,13 +30,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16px"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/colorGray"/>
             <TextView
                 android:id="@+id/txtNickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12px"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/colorGray"/>
         </LinearLayout>
     </RelativeLayout>
 

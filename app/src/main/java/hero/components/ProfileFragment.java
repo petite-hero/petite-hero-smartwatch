@@ -66,11 +66,16 @@ public class ProfileFragment extends Fragment {
 
     private void setAvatar(){
 
-//        Bitmap input = BitmapFactory.decodeResource(getResources(), R.drawable.kid_avatar);
-//        Bitmap output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
-        byte[] decodedString = Base64.decode(spSupport.get("child_photo"), Base64.DEFAULT);
-        Bitmap input = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        Bitmap output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap input;
+        Bitmap output;
+        if (spSupport.get("child_photo").equals("")){
+            input = BitmapFactory.decodeResource(getResources(), R.drawable.kid_avatar);
+            output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+        } else {
+            byte[] decodedString = Base64.decode(spSupport.get("child_photo"), Base64.DEFAULT);
+            input = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+        }
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;
@@ -100,7 +105,8 @@ public class ProfileFragment extends Fragment {
     private void setData(){
 
         txtName.setText(spSupport.get("child_name"));
-        txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
+        String nickname = spSupport.get("child_nickname");
+        if (!nickname.equals("")) txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
 
         List<QuestDTO> badgeList = QuestDAO.getInstance(getActivity()).getList("done");
         if (badgeList.size() > 0) {

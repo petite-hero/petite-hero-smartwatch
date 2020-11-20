@@ -4,12 +4,13 @@ import java.util.Calendar;
 
 public class Util {
 
+    private static final String YELLOW = "#FBC424";
+    private static final String CYAN = "#00ADE8";
+    private static final String BROWN = "#D67046";
+    private static final String RED = "#EC546B";
     public static final String[] BADGE_COLORS = new String[]{
-            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
-            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
-            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
-            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
-            "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff", "#ff0000", "#00ff00", "#0000ff",
+            YELLOW, CYAN, BROWN, BROWN, CYAN, RED, YELLOW, RED, RED, YELLOW,
+            RED, CYAN, RED, CYAN, CYAN, CYAN, CYAN, CYAN, RED, BROWN
     };
 
     public Util(){
@@ -46,8 +47,7 @@ public class Util {
     }
 
     public static String badgeIdToName(int id){
-        String badgeName = "awards_";
-        if (id < 10) badgeName += "0";
+        String badgeName = "aw";
         badgeName += id;
         return badgeName;
     }

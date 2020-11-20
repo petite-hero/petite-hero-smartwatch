@@ -42,6 +42,31 @@ public class HttpDAO {
         new HttpRequestSender("PUT", ipPort + "/child/verify/parent", jsonObj.toString(), callback).execute();
     }
 
+    public void getLocList(String childId){
+        new HttpRequestSender("GET", ipPort+"/location/list/"+childId+"/"+Util.getLongHour0(), null,
+            new DataCallback() {
+                @Override
+                public void onDataReceiving(JSONObject data) throws Exception {
+                    JSONArray jsonArr = data.getJSONArray("data");
+                    List<LocationDTO> locList = new ArrayList<>();
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        JSONObject jsonObj = jsonArr.getJSONObject(i);
+                        long id = jsonObj.getLong("safezoneId");
+                        String name = jsonObj.getString("name");
+                        double latitude = jsonObj.getDouble("latitude");
+                        double longitude = jsonObj.getDouble("longitude");
+                        int radius = jsonObj.getInt("radius");
+                        Calendar fromTime = Util.timeStrToCalendar(jsonObj.getString("fromTime"));
+                        Calendar toTime = Util.timeStrToCalendar(jsonObj.getString("toTime"));
+                        String type = jsonObj.getString("type");
+                        locList.add(new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type));
+                    }
+                    LocationDAO.getInstance().saveList(locList);
+                }
+            }
+        ).execute();
+    }
+
     public void getTaskList(String childId){
         new HttpRequestSender("GET", ipPort+"/task/list/"+childId+"?date="+ Util.getLongHour0()+"&provider=sw", null,
             new DataCallback() {
@@ -79,7 +104,7 @@ public class HttpDAO {
                             String name = jsonObj.getString("name");
                             int badge = jsonObj.getInt("reward");
                             String description = jsonObj.getString("description");
-                            String title = "Người nhện";
+                            String title = jsonObj.getString("title");
                             questList.add(new QuestDTO(id, name, badge, description, title, "assigned"));
                         }
                         QuestDAO.getInstance(context).saveList(questList);
@@ -89,7 +114,7 @@ public class HttpDAO {
     }
 
     public void getBadgeList(String childId){
-        new HttpRequestSender("GET", ipPort+"/quest/list/"+childId+"/badges?max-badges=6&provider=sw", null,
+        new HttpRequestSender("GET", ipPort+"/quest/list/"+childId+"?status=DONE", null,
                 new DataCallback() {
                     @Override
                     public void onDataReceiving(JSONObject data) throws Exception {
@@ -101,29 +126,31 @@ public class HttpDAO {
                             String name = jsonObj.getString("name");
                             int badge = jsonObj.getInt("reward");
                             String description = jsonObj.getString("description");
-                            String title = "Người nhện";
+                            String title = jsonObj.has("title") ? jsonObj.getString("title") : "";
                             questDao.add(new QuestDTO(id, name, badge, description, title, "done"), null);
+                            if (i >= 5) break;
                         }
                     }
                 }
         ).execute();
     }
 
-    public void getChildInfo(String childId, final DataCallback callback){
+    public void getChildInfo(final String childId, final DataCallback callback){
         new HttpRequestSender("GET", ipPort+"/child/" + childId, null, new DataCallback() {
             @Override
             public void onDataReceiving(JSONObject data) throws Exception {
                 JSONObject childObj = data.getJSONObject("data");
                 SPSupport spSupport = new SPSupport(context);
-                spSupport.set("child_name", childObj.getString("lastName") + " " + childObj.getString("firstName"));
-                spSupport.set("child_nickname", childObj.getString("nickName"));
-                spSupport.set("child_photo", childObj.getString("photo"));
+                spSupport.set("child_name", childObj.getString("name"));
+                spSupport.set("child_nickname", childObj.has("nickName") ? childObj.getString("nickName") : "");
+                spSupport.set("child_photo", childObj.has("photo") ? childObj.getString("photo"): "");
                 callback.onDataReceiving(null);
             }
         }).execute();
     }
 
     public void getAllData(String childId, DataCallback callback){
+        getLocList(childId);
         getTaskList(childId);
         getQuestList(childId);
         getBadgeList(childId);

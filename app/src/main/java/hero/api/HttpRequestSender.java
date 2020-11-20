@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class HttpRequestSender extends AsyncTask<Object, Object, String> {
 
-    private static final int TIMEOUT = 6000;
+    private static final int TIMEOUT = 10000;
     String method;
     String url;
     String sendingData;
@@ -52,15 +52,15 @@ public class HttpRequestSender extends AsyncTask<Object, Object, String> {
 
         } catch (Exception e){
             try { this.dataCallback.onDataReceiving(null); }
-            catch (Exception ex){ Log.d("error", e.getMessage()); }
-            Log.e("error", e.getMessage());
+            catch (Exception ex){ Log.e("error", ex.getMessage() != null ? ex.getMessage() : "null"); }
+            Log.e("error", e.getMessage() != null ? e.getMessage() : "null");
 
         } finally {
             try{
                 if (writer != null) writer.close();
                 if (reader != null) reader.close();
                 if (connection != null) connection.disconnect();
-            } catch (Exception ex){ Log.e("error", ex.getMessage()); }
+            } catch (Exception ex){ Log.e("error", ex.getMessage() != null ? ex.getMessage() : "null"); }
         }
 
         return receivingData;
@@ -78,7 +78,7 @@ public class HttpRequestSender extends AsyncTask<Object, Object, String> {
             else this.dataCallback.onDataReceiving(jsonObj);
 
         } catch (Exception e){
-            Log.e("error", e != null ? e.getMessage() : "null");
+            Log.e("error", e.getMessage() != null ? e.getMessage() : "null");
             try { this.dataCallback.onDataReceiving(null); }
             catch (Exception ex){ Log.e("error", e.getMessage()); }
         }
