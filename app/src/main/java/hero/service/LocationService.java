@@ -65,13 +65,14 @@ public class LocationService extends Service {
             public void onStatusChanged(String provider, int status, Bundle extras) {}
         };
 
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // start GPS listener
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, Integer.parseInt(spSupport.get("report_interval")), 0, locationListenerGps);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, spSupport.getInt("report_interval"), 0, locationListenerGps);
         } catch (SecurityException e){
             e.printStackTrace();
         }
@@ -110,6 +111,7 @@ public class LocationService extends Service {
 
         // build json object
         Calendar calendarNow = Calendar.getInstance();
+        Log.d("test", "121");
         boolean status = hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow);
         JSONObject locationJsonObj = new JSONObject();
         try {

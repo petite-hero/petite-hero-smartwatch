@@ -23,4 +23,8 @@ public class SPSupport {
         return ref.getString(key, null);
     }
 
+    public int getInt(String key){
+        return ref.getInt(key, -1);
+    }
+
 }

@@ -44,7 +44,7 @@
     <RelativeLayout
         android:layout_width="240px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10px">
+        android:layout_marginTop="20px">
         <GridView
             android:id="@+id/badgeList"
             android:layout_width="wrap_content"

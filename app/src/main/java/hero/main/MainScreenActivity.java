@@ -68,7 +68,7 @@ public class MainScreenActivity extends Activity {
 
         navBarFocusHighlightContainer = findViewById(R.id.navBarFocusHighlightContainer);
         View navBarFocusHighlight = findViewById(R.id.navBarFocusHighlight);
-        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorGray));
+        PaintDrawable pd = new PaintDrawable(getResources().getColor(R.color.colorStrongCyan));
         pd.setCornerRadius(2);
         navBarFocusHighlight.setBackground(pd);
 
@@ -114,7 +114,7 @@ public class MainScreenActivity extends Activity {
         currentFragmentIndex = fragmentIndex;
 
         // animate nav bar focus
-        ValueAnimator animator = ValueAnimator.ofInt(navBarFocusHighlightContainer.getPaddingLeft(), 66+fragmentIndex*36);  // calculated
+        ValueAnimator animator = ValueAnimator.ofInt(navBarFocusHighlightContainer.getPaddingLeft(), 60+fragmentIndex*42);  // calculated
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator){

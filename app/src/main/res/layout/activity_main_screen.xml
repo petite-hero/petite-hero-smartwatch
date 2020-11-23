@@ -19,8 +19,8 @@
             android:orientation="horizontal">
             <ImageButton
                 android:id="@+id/btnNavTask"
-                android:layout_width="24px"
-                android:layout_height="24px"
+                android:layout_width="30px"
+                android:layout_height="30px"
                 android:scaleType="fitCenter"
                 android:layout_marginTop="6px"
                 android:layout_marginLeft="6px"
@@ -31,8 +31,8 @@
                 android:tag="0"/>
             <ImageButton
                 android:id="@+id/btnNavQuest"
-                android:layout_width="24px"
-                android:layout_height="24px"
+                android:layout_width="30px"
+                android:layout_height="30px"
                 android:scaleType="fitCenter"
                 android:layout_marginTop="6px"
                 android:layout_marginLeft="6px"
@@ -43,8 +43,8 @@
                 android:tag="1"/>
             <ImageButton
                 android:id="@+id/btnNavProfile"
-                android:layout_width="24px"
-                android:layout_height="24px"
+                android:layout_width="30px"
+                android:layout_height="30px"
                 android:scaleType="fitCenter"
                 android:layout_marginTop="6px"
                 android:layout_marginLeft="6px"
