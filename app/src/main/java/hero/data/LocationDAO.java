@@ -17,7 +17,8 @@ public class LocationDAO {
         return instance;
     }
 
-    public void add(){
+    public void add(LocationDTO loc){
+        Location.locList.add(loc);
     }
 
     public void saveList(List<LocationDTO> locList){
@@ -25,6 +26,23 @@ public class LocationDAO {
     }
 
     public void delete(long id){
+        for (LocationDTO loc : Location.locList){
+            if (loc.getId() == id){
+                Location.locList.remove(loc);
+                break;
+            }
+        }
+    }
+
+    public void update(LocationDTO location){
+        int count = 0;
+        for (LocationDTO loc : Location.locList){
+            if (loc.getId() == location.getId()){
+                Location.locList.set(count, location);
+                break;
+            }
+            count++;
+        }
     }
 
 }

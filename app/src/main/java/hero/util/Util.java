@@ -1,5 +1,8 @@
 package hero.util;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Util {
@@ -31,6 +34,14 @@ public class Util {
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr.substring(0, 2)));
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeStr.substring(3, 5)));
         calendar.set(Calendar.SECOND, 0);
+        return calendar;
+    }
+
+    public static Calendar timeStrFormatToCalendar(String timeStr){
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+        Calendar calendar = Calendar.getInstance();
+        try {calendar.setTime(sdf.parse(timeStr));}
+        catch (Exception e){Log.e("error", e.getMessage());}
         return calendar;
     }
 

@@ -50,6 +50,7 @@ public class FCMService extends FirebaseMessagingService {
         Map<String, String> noti = remoteMessage.getData();
         TaskDAO taskDao = TaskDAO.getInstance(this);
         QuestDAO questDao = QuestDAO.getInstance(this);
+        LocationDAO locationDao = LocationDAO.getInstance();
 
         Log.d("test", "Noti received | Type:" + noti.get("title") + " | Body: " + noti.get("body") + " | Data: " + noti.get("data"));
 
@@ -76,7 +77,7 @@ public class FCMService extends FirebaseMessagingService {
                         String type = jsonObj.getString("type");
                         locList.add(new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type));
                     }
-                    LocationDAO.getInstance().saveList(locList);
+                    locationDao.saveList(locList);
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
@@ -122,7 +123,31 @@ public class FCMService extends FirebaseMessagingService {
 
             // get UPDATED SAFE ZONE in the day
             if (noti.get("body").equals("updated-safezones")){
-                // TODO
+                // {"safezoneId":42,"status":"DELETED"}
+                try {
+                    JSONObject jsonObj = new JSONObject(noti.get("data"));
+                    String status = jsonObj.getString("status");
+                    long id = jsonObj.getLong("safezoneId");
+                    if (status.equals("ADDED") || status.equals("UPDATED")){
+                        String name = jsonObj.getString("name");
+                        double latitude = jsonObj.getDouble("latitude");
+                        double longitude = jsonObj.getDouble("longitude");
+                        int radius = jsonObj.getInt("radius");
+                        Calendar fromTime = Util.timeStrFormatToCalendar(jsonObj.getString("fromTime"));
+                        Calendar toTime = Util.timeStrFormatToCalendar(jsonObj.getString("toTime"));
+                        String type = jsonObj.getString("type");
+                        LocationDTO loc = new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type);
+                        if (status.equals("ADDED")) locationDao.add(loc);
+                        else if (status.equals("UPDATED")) locationDao.update(loc);
+                    } else if (status.equals("DELETED")){
+                        locationDao.delete(id);
+                    }
+                    // String tmp = "";
+                    // for (LocationDTO loc : Location.locList) tmp += loc.name + " ";
+                    // Log.d("test", tmp);
+                } catch (Exception e){
+                    Log.e("error", "Error while parsing JsonObject");
+                }
             }
 
             // get UPDATED TASK in the day
@@ -140,7 +165,7 @@ public class FCMService extends FirebaseMessagingService {
                         String description = jsonObj.getString("description");
                         taskDao.add(new TaskDTO(id, name, type, description, fromTime, toTime, status), null);
                         Noti.createReminder(this, fromTime, "Con có công việc mới: " + name, id);
-                    } else{
+                    } else if (jsonObj.getString("status").equals("DELETED")){
                         taskDao.delete(id);
                         Noti.cancelReminder(this, "", id);
                     }
@@ -175,7 +200,6 @@ public class FCMService extends FirebaseMessagingService {
                     JSONArray jsonArr = new JSONArray(noti.get("data"));
                     for (int i = 0; i < jsonArr.length(); i++) {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);
-                        Log.d("test", jsonObj.toString());
                         String name = jsonObj.getString("name");
                         Noti.createNoti(this, MainScreenActivity.class, 1, "Con có nhiệm vụ: " + name);
                     }

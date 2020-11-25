@@ -101,7 +101,6 @@ public class LocationService extends Service {
         isRunning = false;
     }
 
-
 //        private static boolean isSafe(Location location){
 //        if (location.getLatitude() <= 10.8355) return false;
 //        return true;
@@ -111,7 +110,6 @@ public class LocationService extends Service {
 
         // build json object
         Calendar calendarNow = Calendar.getInstance();
-        Log.d("test", "121");
         boolean status = hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow);
         JSONObject locationJsonObj = new JSONObject();
         try {

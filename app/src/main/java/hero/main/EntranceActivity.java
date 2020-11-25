@@ -6,11 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import hero.data.HttpDAO;
 import hero.util.SPSupport;
 
 public class EntranceActivity extends Activity {
 
-    private static final String IP_PORT = "http://10.1.147.102:8080";
+    private static final String IP_PORT = "http://10.1.142.236:8080";
     private static final int INTERVAL = 5000;
 
     @Override
@@ -26,6 +27,8 @@ public class EntranceActivity extends Activity {
         startActivity(intent);
 
         setConfig();
+
+        HttpDAO.getInstance(this, IP_PORT).getLocList(spSupport.get("child_id"));
 
     }
 

@@ -54,7 +54,7 @@ public class BadgeAdapter extends ArrayAdapter<QuestDTO> {
         // badge title
 //        String[] tmpTitleList = new String[] {"Người nhện", "Dũng sĩ", "Thần đồng", "Thợ lặn", "Siêng năng", "Chăm làm"};
 //        txtTitle.setText(tmpTitleList[position]);
-//        txtTitle.setText(badgeList.get(position).getTitle());
+        txtTitle.setText(badgeList.get(position).getTitle());
         txtTitle.setTypeface(ResourcesCompat.getFont(activity, R.font.acumin));
 
         // apply to view

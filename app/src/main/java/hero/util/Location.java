@@ -35,19 +35,26 @@ public class Location {
     // check if the current location is safe
     public static boolean isSafe(double lat, double lng, Calendar time){
 
-        if (locList.size() == 0) return true; // should be false
+        if (locList.size() == 0) return false;
 
-        // the child had to be in a location at the current time, check location radius
+        // check if child is at home | inner radius
+        for (LocationDTO loc : locList){
+            if (loc.type.equals("Home") && distance(lat, lng, loc.latitude, loc.longitude) <= loc.radius)
+                return true;
+        }
+
+        // check if child has to be in a location | inner radius
         for (LocationDTO loc : locList){
             if (loc.fromTime.before(time) && loc.toTime.after(time)){
-                return distance(lat, lng, loc.latitude, loc.longitude) < loc.radius;
+                return distance(lat, lng, loc.latitude, loc.longitude) <= loc.radius;
             }
         }
 
-        // if the child did not have to be in any location at the current time, check outer radius
+        // if the child is not in any location | outer radius
         for (LocationDTO loc : locList){
             if (distance(lat, lng, loc.latitude, loc.longitude) < outerRadius) return true;
         }
+
         return false;
 
     }
