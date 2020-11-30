@@ -3,7 +3,9 @@ package hero.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.PaintDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ import hero.util.SPSupport;
 
 public class WelcomeActivity extends Activity{
 
-    private static final boolean IS_SKIP_LOGIN = false;  // testing
+    private static final boolean IS_SKIP_LOGIN = true;  // testing
 
     TextView txtWelcome;
     Button btnScanQR;
@@ -113,15 +115,15 @@ public class WelcomeActivity extends Activity{
         // SAVE SCANNED CHILD ID
         spSupport.set("child_id", childId);
 
-        // REPORT DEVICE TOKEN TO SERVER
+        // GET DEVICE TOKEN, ANDROID ID, DEVICE NAME
         if (FCMService.token == null || FCMService.token.length() == 0){
             Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
             return;
         }
-        // Log.d("test", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-        // Log.d("test", Build.MANUFACTURER  + " " + Build.MODEL);
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceName = Build.MANUFACTURER  + " " + Build.MODEL;
 
-        HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, new DataCallback() {
+        HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, androidId, deviceName, new DataCallback() {
             @Override
             public void onDataReceiving(JSONObject data) throws Exception {
                 if (data == null) Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();

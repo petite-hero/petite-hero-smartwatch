@@ -21,12 +21,15 @@ import java.util.Map;
 
 import hero.data.LocationDAO;
 import hero.data.LocationDTO;
+import hero.data.QuadDTO;
 import hero.data.QuestDAO;
 import hero.data.QuestDTO;
 import hero.data.TaskDAO;
 import hero.data.TaskDTO;
 import hero.main.MainScreenActivity;
+import hero.util.Location;
 import hero.util.Noti;
+import hero.util.SPSupport;
 import hero.util.Util;
 
 public class FCMService extends FirebaseMessagingService {
@@ -42,8 +45,6 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-
-        // TODO: AUTOMATIC UPDATE AFTER DAY PASSED
 
         super.onMessageReceived(remoteMessage);
 
@@ -71,13 +72,23 @@ public class FCMService extends FirebaseMessagingService {
                         String name = jsonObj.getString("name");
                         double latitude = jsonObj.getDouble("latitude");
                         double longitude = jsonObj.getDouble("longitude");
-                        int radius = jsonObj.getInt("radius");
+//                        int radius = jsonObj.getInt("radius");
                         Calendar fromTime = Util.timeStrToCalendar(jsonObj.getString("fromTime"));
                         Calendar toTime = Util.timeStrToCalendar(jsonObj.getString("toTime"));
                         String type = jsonObj.getString("type");
-                        locList.add(new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type));
+                        double latA = jsonObj.getDouble("latA");
+                        double lngA = jsonObj.getDouble("lngA");
+                        double latB = jsonObj.getDouble("latB");
+                        double lngB = jsonObj.getDouble("lngB");
+                        double latC = jsonObj.getDouble("latC");
+                        double lngC = jsonObj.getDouble("lngC");
+                        double latD = jsonObj.getDouble("latD");
+                        double lngD = jsonObj.getDouble("lngD");
+                        QuadDTO quad = new QuadDTO(latA, lngA, latB, lngB, latC, lngC, latD, lngD);
+                        locList.add(new LocationDTO(id, name, latitude, longitude, 0, fromTime, toTime, type, quad));
                     }
                     locationDao.saveList(locList);
+                    new SPSupport(this).setLong("last_safezone_update", Calendar.getInstance().getTimeInMillis());
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
@@ -99,6 +110,7 @@ public class FCMService extends FirebaseMessagingService {
                         taskList.add(new TaskDTO(id, name, type, description, fromTime, toTime, "ASSIGNED"));
                     }
                     taskDao.saveList(taskList);
+                    new SPSupport(this).setLong("last_task_update", Calendar.getInstance().getTimeInMillis());
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
@@ -132,19 +144,25 @@ public class FCMService extends FirebaseMessagingService {
                         String name = jsonObj.getString("name");
                         double latitude = jsonObj.getDouble("latitude");
                         double longitude = jsonObj.getDouble("longitude");
-                        int radius = jsonObj.getInt("radius");
+//                        int radius = jsonObj.getInt("radius");
                         Calendar fromTime = Util.timeStrFormatToCalendar(jsonObj.getString("fromTime"));
                         Calendar toTime = Util.timeStrFormatToCalendar(jsonObj.getString("toTime"));
                         String type = jsonObj.getString("type");
-                        LocationDTO loc = new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type);
+                        double latA = jsonObj.getDouble("latA");
+                        double lngA = jsonObj.getDouble("lngA");
+                        double latB = jsonObj.getDouble("latB");
+                        double lngB = jsonObj.getDouble("lngB");
+                        double latC = jsonObj.getDouble("latC");
+                        double lngC = jsonObj.getDouble("lngC");
+                        double latD = jsonObj.getDouble("latD");
+                        double lngD = jsonObj.getDouble("lngD");
+                        QuadDTO quad = new QuadDTO(latA, lngA, latB, lngB, latC, lngC, latD, lngD);
+                        LocationDTO loc = new LocationDTO(id, name, latitude, longitude, 0, fromTime, toTime, type, quad);
                         if (status.equals("ADDED")) locationDao.add(loc);
                         else if (status.equals("UPDATED")) locationDao.update(loc);
                     } else if (status.equals("DELETED")){
                         locationDao.delete(id);
                     }
-                    // String tmp = "";
-                    // for (LocationDTO loc : Location.locList) tmp += loc.name + " ";
-                    // Log.d("test", tmp);
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
@@ -187,7 +205,36 @@ public class FCMService extends FirebaseMessagingService {
 
             // get updated SYSTEM CONFIGURATION
             if (noti.get("body").equals("updated-config")) {
-                // TODO
+                // TODO test this
+                try {
+
+                    JSONObject jsonObj = new JSONObject(noti.get("data"));
+                    int outerRadius = jsonObj.getInt("outerRadius");
+                    int reportDelay = jsonObj.getInt("reportDelay");
+                    SPSupport spSupport = new SPSupport(this);
+
+                    spSupport.setInt("outer_radius", outerRadius);
+                    Location.outerRadius = outerRadius;
+
+                    if (LocationService.isRunning) {
+                        LocationService.isRunning = false;
+                        final int currentReportDelay = spSupport.getInt("report_interval");
+                        spSupport.setInt("report_interval", reportDelay);
+                        new Thread(){
+                            public void run(){
+                                try {
+                                    Thread.sleep(currentReportDelay);
+                                    Intent locationIntent = new Intent(FCMService.this, LocationService.class);
+                                    startService(locationIntent);
+                                }
+                                catch(InterruptedException ex){Thread.currentThread().interrupt();}
+                            }
+                        }.start();
+                    } else spSupport.setInt("report_interval", reportDelay);
+
+                } catch (Exception e){
+                    Log.e("error", "Error while parsing JsonObject");
+                }
             }
 
         // =============== NORMAL NOTI LISTENER ===============

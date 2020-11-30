@@ -14,20 +14,13 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import hero.api.DataCallback;
 import hero.api.HttpRequestSender;
-import hero.data.LocationDTO;
 import hero.service.FCMService;
 import hero.service.LocationService;
-import hero.util.Location;
-import hero.util.Util;
 
 public class DeveloperActivity extends Activity {
 
@@ -136,33 +129,33 @@ public class DeveloperActivity extends Activity {
     }
 
     public void getSafeZones(View view){
-        new HttpRequestSender("GET", ref.getString("ip_port", null) + "/location/list/" +
-                                 ref.getString("child_id", null) + "/"+
-                                 Util.getLongHour0(), null,
-            new DataCallback() {
-                @Override
-                public void onDataReceiving(JSONObject data) throws Exception {
-                    Log.d("test", data.toString());
-                    JSONArray fetchedData = data.getJSONArray("data");
-                    List<LocationDTO> locList = new ArrayList<>();
-                    for (int i = 0; i < fetchedData.length(); i++){
-                        JSONObject loc = fetchedData.getJSONObject(i);
-                        LocationDTO newLoc = new LocationDTO(
-                            loc.getLong("safezoneId"),
-                            loc.getString("name"),
-                            loc.getDouble("latitude"),
-                            loc.getDouble("longitude"),
-                            loc.getInt("radius"),
-                            Util.timeStrToCalendar(loc.getString("fromTime")),
-                            Util.timeStrToCalendar(loc.getString("toTime")),
-                            loc.getString("type")
-                        );
-                        locList.add(newLoc);
-                    }
-                    Location.locList = locList;
-                }
-            }
-        ).execute();
+//        new HttpRequestSender("GET", ref.getString("ip_port", null) + "/location/list/" +
+//                                 ref.getString("child_id", null) + "/"+
+//                                 Util.getLongHour0(), null,
+//            new DataCallback() {
+//                @Override
+//                public void onDataReceiving(JSONObject data) throws Exception {
+//                    Log.d("test", data.toString());
+//                    JSONArray fetchedData = data.getJSONArray("data");
+//                    List<LocationDTO> locList = new ArrayList<>();
+//                    for (int i = 0; i < fetchedData.length(); i++){
+//                        JSONObject loc = fetchedData.getJSONObject(i);
+//                        LocationDTO newLoc = new LocationDTO(
+//                            loc.getLong("safezoneId"),
+//                            loc.getString("name"),
+//                            loc.getDouble("latitude"),
+//                            loc.getDouble("longitude"),
+//                            loc.getInt("radius"),
+//                            Util.timeStrToCalendar(loc.getString("fromTime")),
+//                            Util.timeStrToCalendar(loc.getString("toTime")),
+//                            loc.getString("type")
+//                        );
+//                        locList.add(newLoc);
+//                    }
+//                    Location.locList = locList;
+//                }
+//            }
+//        ).execute();
     }
 
     // ------------------- CONFIG DISPLAY -------------------

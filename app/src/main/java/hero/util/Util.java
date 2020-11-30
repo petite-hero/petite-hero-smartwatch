@@ -57,6 +57,14 @@ public class Util {
         return result;
     }
 
+    public static boolean isToday(long timestamp){
+        Calendar now = Calendar.getInstance();
+        Calendar timeToCheck = Calendar.getInstance();
+        timeToCheck.setTimeInMillis(timestamp);
+        return now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR) &&
+               now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR);
+    }
+
     public static String badgeIdToName(int id){
         String badgeName = "aw";
         badgeName += id;

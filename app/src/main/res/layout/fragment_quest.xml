@@ -16,7 +16,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80px"
-                android:text="Con không có nhiệm vụ nào"
+                android:text="Không có nhiệm vụ nào cho con"
                 android:textAlignment="center"
                 android:textSize="16px"
                 android:textColor="@color/colorListPlaceholder"

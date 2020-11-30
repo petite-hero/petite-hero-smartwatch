@@ -1,6 +1,7 @@
 package hero.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,11 +32,13 @@ public class HttpDAO {
         return instance;
     }
 
-    public void putDeviceToken(String childId, String token, DataCallback callback){
+    public void putDeviceToken(String childId, String token, String androidId, String deviceName, DataCallback callback){
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put("childId", childId)
-                    .put("pushToken", token);
+                    .put("pushToken", token)
+                    .put("androidId", androidId)
+                    .put("deviceName", deviceName);
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -55,11 +58,20 @@ public class HttpDAO {
                         String name = jsonObj.getString("name");
                         double latitude = jsonObj.getDouble("latitude");
                         double longitude = jsonObj.getDouble("longitude");
-                        int radius = jsonObj.getInt("radius");
+//                        int radius = jsonObj.getInt("radius");
                         Calendar fromTime = Util.timeStrToCalendar(jsonObj.getString("fromTime"));
                         Calendar toTime = Util.timeStrToCalendar(jsonObj.getString("toTime"));
                         String type = jsonObj.getString("type");
-                        locList.add(new LocationDTO(id, name, latitude, longitude, radius, fromTime, toTime, type));
+                        double latA = jsonObj.getDouble("latA");
+                        double lngA = jsonObj.getDouble("lngA");
+                        double latB = jsonObj.getDouble("latB");
+                        double lngB = jsonObj.getDouble("lngB");
+                        double latC = jsonObj.getDouble("latC");
+                        double lngC = jsonObj.getDouble("lngC");
+                        double latD = jsonObj.getDouble("latD");
+                        double lngD = jsonObj.getDouble("lngD");
+                        QuadDTO quad = new QuadDTO(latA, lngA, latB, lngB, latC, lngC, latD, lngD);
+                        locList.add(new LocationDTO(id, name, latitude, longitude, 0, fromTime, toTime, type, quad));
                     }
                     LocationDAO.getInstance().saveList(locList);
                 }

@@ -36,7 +36,7 @@ public class LocationService extends Service {
         super.onCreate();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        spSupport =  new SPSupport(this);
+        spSupport = new SPSupport(this);
 
         // GPS listener
         locationListenerGps = new LocationListener() {

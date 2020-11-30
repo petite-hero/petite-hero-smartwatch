@@ -37,17 +37,17 @@ public class Location {
 
         if (locList.size() == 0) return false;
 
-        // check if child is at home | inner radius
-        for (LocationDTO loc : locList){
-            if (loc.type.equals("Home") && distance(lat, lng, loc.latitude, loc.longitude) <= loc.radius)
-                return true;
-        }
-
         // check if child has to be in a location | inner radius
         for (LocationDTO loc : locList){
             if (loc.fromTime.before(time) && loc.toTime.after(time)){
                 return distance(lat, lng, loc.latitude, loc.longitude) <= loc.radius;
             }
+        }
+
+        // check if child is at home | inner radius
+        for (LocationDTO loc : locList){
+            if (loc.type.equals("Home") && distance(lat, lng, loc.latitude, loc.longitude) <= loc.radius)
+                return true;
         }
 
         // if the child is not in any location | outer radius

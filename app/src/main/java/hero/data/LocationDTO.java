@@ -12,12 +12,13 @@ public class LocationDTO {
     public Calendar fromTime;
     public Calendar toTime;
     public String type;
+    public QuadDTO quad;
 
     public LocationDTO(){
 
     }
 
-    public LocationDTO(long id, String name, double latitude, double longitude, int radius, Calendar fromTime, Calendar toTime, String type) {
+    public LocationDTO(long id, String name, double latitude, double longitude, int radius, Calendar fromTime, Calendar toTime, String type, QuadDTO quad) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -26,6 +27,7 @@ public class LocationDTO {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.type = type;
+        this.quad = quad;
     }
 
     public long getId() {
@@ -90,5 +92,13 @@ public class LocationDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public QuadDTO getQuad() {
+        return quad;
+    }
+
+    public void setQuad(QuadDTO quad) {
+        this.quad = quad;
     }
 }
