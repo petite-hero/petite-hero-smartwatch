@@ -26,7 +26,7 @@
         android:layout_height="40px"
         android:layout_marginTop="20px"
         android:layout_gravity="center_horizontal"
-        android:text="Kết nối"
+        android:text="KẾT NỐI"
         android:textColor="@android:color/white"
         android:textSize="16px"
         android:onClick="scanQRCode" />

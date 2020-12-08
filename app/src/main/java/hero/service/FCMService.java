@@ -263,7 +263,7 @@ public class FCMService extends FirebaseMessagingService {
                     String name = jsonObj.getString("name");
                     String description = jsonObj.getString("description");
                     int badge = jsonObj.getInt("reward");
-                    String title = "Người nhện";
+                    String title = jsonObj.isNull("title") ? "Người nhện" : jsonObj.getString("title");
                     questDao.add(new QuestDTO(id, name, badge, description, title, "assigned"), null);
                     Noti.createNoti(this, MainScreenActivity.class, 1, "Con có nhiệm vụ mới: " + name);
                 } catch (Exception e){

@@ -13,7 +13,7 @@ import hero.util.Util;
 
 public class EntranceActivity extends Activity {
 
-    private static final String IP_PORT = "http://192.168.1.37:8080";
+    private static final String IP_PORT = "http://10.1.158.89:8080";
     private static final int INTERVAL = 5000;
     private static final int OUTER_RADIUS = 2500;
 
