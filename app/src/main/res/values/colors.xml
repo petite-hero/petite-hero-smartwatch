@@ -23,5 +23,6 @@
     <color name="colorTaskBackground">#ffffff</color>
     <color name="colorTaskLate">#656565</color>
     <color name="colorListPlaceholder">#909090</color>
+    <color name="colorText">#1d1d1d</color>
 
 </resources>

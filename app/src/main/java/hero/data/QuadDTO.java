@@ -19,7 +19,7 @@ public class QuadDTO {
         return new double[]{this.lats[index], this.lngs[index]};
     }
 
-    public void setVertex(double lat, double lng, int index){
+    public void setVertex(int index, double lat, double lng){
         this.lats[index] = lat;
         this.lngs[index] = lng;
     }

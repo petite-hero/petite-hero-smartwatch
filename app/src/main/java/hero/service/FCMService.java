@@ -51,7 +51,7 @@ public class FCMService extends FirebaseMessagingService {
         Map<String, String> noti = remoteMessage.getData();
         TaskDAO taskDao = TaskDAO.getInstance(this);
         QuestDAO questDao = QuestDAO.getInstance(this);
-        LocationDAO locationDao = LocationDAO.getInstance();
+        LocationDAO locationDao = LocationDAO.getInstance(this);
 
         Log.d("test", "Noti received | Type:" + noti.get("title") + " | Body: " + noti.get("body") + " | Data: " + noti.get("data"));
 
@@ -158,7 +158,7 @@ public class FCMService extends FirebaseMessagingService {
                         double lngD = jsonObj.getDouble("lngD");
                         QuadDTO quad = new QuadDTO(latA, lngA, latB, lngB, latC, lngC, latD, lngD);
                         LocationDTO loc = new LocationDTO(id, name, latitude, longitude, 0, fromTime, toTime, type, quad);
-                        if (status.equals("ADDED")) locationDao.add(loc);
+                        if (status.equals("ADDED")) locationDao.add(loc, null);
                         else if (status.equals("UPDATED")) locationDao.update(loc);
                     } else if (status.equals("DELETED")){
                         locationDao.delete(id);
@@ -205,12 +205,13 @@ public class FCMService extends FirebaseMessagingService {
 
             // get updated SYSTEM CONFIGURATION
             if (noti.get("body").equals("updated-config")) {
+                // {"outer_radius":100,"report_delay":40000}
                 // TODO test this
                 try {
 
                     JSONObject jsonObj = new JSONObject(noti.get("data"));
-                    int outerRadius = jsonObj.getInt("outerRadius");
-                    int reportDelay = jsonObj.getInt("reportDelay");
+                    int outerRadius = jsonObj.getInt("outer_radius");
+                    int reportDelay = jsonObj.getInt("report_delay");
                     SPSupport spSupport = new SPSupport(this);
 
                     spSupport.setInt("outer_radius", outerRadius);
@@ -235,6 +236,16 @@ public class FCMService extends FirebaseMessagingService {
                 } catch (Exception e){
                     Log.e("error", "Error while parsing JsonObject");
                 }
+            }
+
+            // LOGOUT when new device is attached
+            if (noti.get("body").equals("logout")) {
+                SPSupport spSupport = new SPSupport(this);
+                spSupport.set("child_id", null);
+                try{Thread.sleep(1000);}
+                catch(InterruptedException ex){Thread.currentThread().interrupt();}
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
             }
 
         // =============== NORMAL NOTI LISTENER ===============

@@ -1,7 +1,6 @@
 package hero.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +72,7 @@ public class HttpDAO {
                         QuadDTO quad = new QuadDTO(latA, lngA, latB, lngB, latC, lngC, latD, lngD);
                         locList.add(new LocationDTO(id, name, latitude, longitude, 0, fromTime, toTime, type, quad));
                     }
-                    LocationDAO.getInstance().saveList(locList);
+                    LocationDAO.getInstance(context).saveList(locList);
                 }
             }
         ).execute();

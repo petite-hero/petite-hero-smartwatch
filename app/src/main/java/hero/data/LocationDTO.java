@@ -4,15 +4,15 @@ import java.util.Calendar;
 
 public class LocationDTO {
 
-    public long id;
-    public String name;
-    public double latitude;
-    public double longitude;
-    public int radius;
-    public Calendar fromTime;
-    public Calendar toTime;
-    public String type;
-    public QuadDTO quad;
+    long id;
+    String name;
+    double latitude;
+    double longitude;
+    int radius;
+    Calendar fromTime;
+    Calendar toTime;
+    String type;
+    QuadDTO quad;
 
     public LocationDTO(){
 

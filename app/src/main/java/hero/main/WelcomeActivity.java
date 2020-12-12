@@ -1,6 +1,7 @@
 package hero.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Build;
@@ -25,10 +26,9 @@ import hero.util.SPSupport;
 
 public class WelcomeActivity extends Activity{
 
-    private static final boolean IS_SKIP_LOGIN = false;  // testing
-
     TextView txtWelcome;
     Button btnScanQR;
+    ProgressDialog progressDialog;
     SPSupport spSupport;
     FCMService fcmService;
 
@@ -80,31 +80,27 @@ public class WelcomeActivity extends Activity{
 
     // EVENT HANDLER: SCAN BUTTON PRESSED
     public void scanQRCode(View view) {
-
-        // TEST - skip login
-        if (IS_SKIP_LOGIN) {
-            final String childId = "3";
-            handleLogin(childId);
-        }
-
         // scan child id
-        else {
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-            integrator.setPrompt("Scan");
-            integrator.setCameraId(0);  // Use a specific camera of the device
-            integrator.setBeepEnabled(false);
-            integrator.setBarcodeImageEnabled(true);
-            integrator.initiateScan();
-        }
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Scan");
+        integrator.setCameraId(0);  // Use a specific camera of the device
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
 
+    // EVENT HANDLER: SKIP LOGIN
+    public void loginSkip(View view){
+        final String CHILD_ID = "3";
+        handleLogin(CHILD_ID);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {  // handle QR scanned
+        if(result != null && result.getContents() != null) {  // handle QR scanned
             final String scannedCode = result.getContents();
             handleLogin(scannedCode);
         }
@@ -112,11 +108,18 @@ public class WelcomeActivity extends Activity{
 
     private void handleLogin(final String childId){
 
+        // show progress dialog
+        progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
+        progressDialog.setMessage("Vui lòng chờ...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         // SAVE SCANNED CHILD ID
         spSupport.set("child_id", childId);
 
         // GET DEVICE TOKEN, ANDROID ID, DEVICE NAME
         if (FCMService.token == null || FCMService.token.length() == 0){
+            progressDialog.dismiss();
             Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -126,7 +129,10 @@ public class WelcomeActivity extends Activity{
         HttpDAO.getInstance(this, spSupport.get("ip_port")).putDeviceToken(childId, FCMService.token, androidId, deviceName, new DataCallback() {
             @Override
             public void onDataReceiving(JSONObject data) throws Exception {
-                if (data == null) Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+                if (data == null){
+                    Toast.makeText(WelcomeActivity.this, "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                }
                 else{
                     // LOAD CHILD DATA
                     HttpDAO.getInstance(WelcomeActivity.this, spSupport.get("ip_port")).getAllData(childId, new DataCallback() {
@@ -138,6 +144,7 @@ public class WelcomeActivity extends Activity{
                             finish();
                             startActivity(intent);
                             Toast.makeText(WelcomeActivity.this, "Kết nối thành công!", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
                     });
                 }

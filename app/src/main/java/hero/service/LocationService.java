@@ -17,13 +17,14 @@ import java.util.Calendar;
 
 import hero.api.DataCallback;
 import hero.api.HttpRequestSender;
+import hero.data.LocationDAO;
 import hero.util.SPSupport;
 
 public class LocationService extends Service {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
-    private static boolean isUsingNetwork = false;
+    private static boolean isUsingNetwork = false;  // test
     SPSupport spSupport;
 
     protected LocationManager locationManager;
@@ -37,6 +38,10 @@ public class LocationService extends Service {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         spSupport = new SPSupport(this);
+
+        LocationDAO locDao = LocationDAO.getInstance(this);
+        hero.util.Location.locList = locDao.getList();
+        hero.util.Location.outerRadius = spSupport.getInt("outer_radius");
 
         // GPS listener
         locationListenerGps = new LocationListener() {
@@ -65,11 +70,11 @@ public class LocationService extends Service {
             public void onStatusChanged(String provider, int status, Bundle extras) {}
         };
 
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         // start GPS listener
         try{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, spSupport.getInt("report_interval"), 0, locationListenerGps);
@@ -100,11 +105,6 @@ public class LocationService extends Service {
         if (isUsingNetwork) locationManager.removeUpdates(locationListenerNetwork);
         isRunning = false;
     }
-
-//        private static boolean isSafe(Location location){
-//        if (location.getLatitude() <= 10.8355) return false;
-//        return true;
-//    }
 
     private void handleLocationChanged(Location location, String provider){
 

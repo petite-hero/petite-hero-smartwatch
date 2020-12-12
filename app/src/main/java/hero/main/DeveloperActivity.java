@@ -25,7 +25,8 @@ import hero.service.LocationService;
 public class DeveloperActivity extends Activity {
 
     EditText edtChildId;
-    TextView txtLocationStatus, txtConfigInfo;
+//    TextView txtLocationStatus;
+    TextView txtConfigInfo;
     SharedPreferences ref;
     FCMService fcmService;
 
@@ -41,7 +42,7 @@ public class DeveloperActivity extends Activity {
         setContentView(R.layout.activity_developer);
 
         edtChildId = findViewById(R.id.edtChildId);
-        txtLocationStatus = findViewById(R.id.txtLocationStatus);
+//        txtLocationStatus = findViewById(R.id.txtLocationStatus);
         txtConfigInfo = findViewById(R.id.txtConfigInfo);
         fcmService = new FCMService();
         ref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -97,12 +98,12 @@ public class DeveloperActivity extends Activity {
             startService(locationIntent);
         }
         LocationService.isRunning = true;
-        txtLocationStatus.setText("Location service started");
+//        txtLocationStatus.setText("Location service started");
     }
 
     public void stopLocationService(View view){
         LocationService.isRunning = false;
-        txtLocationStatus.setText("Location service stopping requested. Wait " + ref.getInt("report_interval", -1)/1000 + " secs");
+//        txtLocationStatus.setText("Location service stopping requested. Wait " + ref.getInt("report_interval", -1)/1000 + " secs");
     }
 
     public void sendLocationWithStatus(View view){
