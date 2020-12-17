@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,9 +39,11 @@ public class LocationDAO extends SQLiteOpenHelper {
     }
 
     public void add(LocationDTO dto, SQLiteDatabase db){
-        Location.locList.add(dto);
         boolean isSaveList = false;
-        if (db == null) db = getWritableDatabase();
+        if (db == null){
+            db = getWritableDatabase();
+            Location.locList.add(dto);
+        }
         else isSaveList = true;
         ContentValues values = new ContentValues();
         values.put("id", dto.getId());

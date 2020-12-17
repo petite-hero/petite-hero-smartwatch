@@ -24,7 +24,7 @@ public class LocationService extends Service {
 
     public static boolean isRunning = false;
     public static boolean isEmergency = false;
-    private static boolean isUsingNetwork = false;  // test
+    private static boolean isUsingNetwork = true;  // test
     SPSupport spSupport;
 
     protected LocationManager locationManager;
@@ -84,7 +84,7 @@ public class LocationService extends Service {
         // start network listener
         if (isUsingNetwork) {
             try {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, Integer.parseInt(spSupport.get("report_interval")), 0, locationListenerNetwork);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, spSupport.getInt("report_interval"), 0, locationListenerNetwork);
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
@@ -108,9 +108,12 @@ public class LocationService extends Service {
 
     private void handleLocationChanged(Location location, String provider){
 
+        Log.d("test", "Location: " + location.getLatitude() + " " + location.getLongitude());
+
         // build json object
         Calendar calendarNow = Calendar.getInstance();
         boolean status = hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow);
+        Log.d("test", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendarNow.getTimeInMillis()) + " " + status);
         JSONObject locationJsonObj = new JSONObject();
         try {
             locationJsonObj.put("child", spSupport.get("child_id"))

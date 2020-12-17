@@ -1,6 +1,7 @@
 package hero.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,7 @@ public class HttpDAO {
                 @Override
                 public void onDataReceiving(JSONObject data) throws Exception {
                     JSONArray jsonArr = data.getJSONArray("data");
+                    Log.d("Test", "Loc list: " + jsonArr.toString());
                     List<LocationDTO> locList = new ArrayList<>();
                     for (int i = 0; i < jsonArr.length(); i++) {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);

@@ -122,8 +122,12 @@ public class FCMService extends FirebaseMessagingService {
             // turning on/off LOCATION REPORTING
             if (noti.get("body").equals("active")){
                 if (!LocationService.isRunning) {
-                    Intent locationIntent = new Intent(this, LocationService.class);
-                    startService(locationIntent);
+                    try {
+                        Intent locationIntent = new Intent(this, LocationService.class);
+                        startService(locationIntent);
+                    } catch (Exception e){
+                        Log.e("error", "Cannot start location service");
+                    }
                 }
                 LocationService.isRunning = true;
             }

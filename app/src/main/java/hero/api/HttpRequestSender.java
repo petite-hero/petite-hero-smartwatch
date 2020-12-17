@@ -76,11 +76,10 @@ public class HttpRequestSender extends AsyncTask<Object, Object, String> {
             JSONObject jsonObj = new JSONObject(result);
             if (jsonObj.getInt("code") >= 400) this.dataCallback.onDataReceiving(null);
             else this.dataCallback.onDataReceiving(jsonObj);
-
         } catch (Exception e){
             Log.e("error", e.getMessage() != null ? e.getMessage() : "null");
             try { this.dataCallback.onDataReceiving(null); }
-            catch (Exception ex){ Log.e("error", e.getMessage()); }
+            catch (Exception ex){ Log.e("error", ex.getMessage() != null ? ex.getMessage() : "null"); }
         }
 
     }
