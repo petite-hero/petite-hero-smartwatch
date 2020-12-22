@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
         Bitmap input;
         Bitmap output;
         if (spSupport.get("child_photo").equals("")){
-            input = BitmapFactory.decodeResource(getResources(), R.drawable.kid_avatar);
+            input = BitmapFactory.decodeResource(getResources(), spSupport.get("child_gender").equals("Male") ? R.drawable.avatar_son : R.drawable.avatar_daughter);
             output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
         } else {
             byte[] decodedString = Base64.decode(spSupport.get("child_photo"), Base64.DEFAULT);
@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment {
 
         txtName.setText(spSupport.get("child_name"));
         String nickname = spSupport.get("child_nickname");
-        if (!nickname.equals("")) txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
+        if (nickname != null && nickname.length() != 0) txtNickname.setText('(' + spSupport.get("child_nickname") + ')');
 
         List<QuestDTO> badgeList = QuestDAO.getInstance(getActivity()).getList("done");
         if (badgeList.size() > 0) {

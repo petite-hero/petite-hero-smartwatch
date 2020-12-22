@@ -49,7 +49,6 @@ public class Noti {
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify((int) Calendar.getInstance().getTimeInMillis(), builder.build());
 

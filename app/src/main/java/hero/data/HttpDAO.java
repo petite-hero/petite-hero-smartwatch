@@ -157,6 +157,7 @@ public class HttpDAO {
                 spSupport.set("child_name", childObj.getString("name"));
                 spSupport.set("child_nickname", childObj.has("nickName") ? childObj.getString("nickName") : "");
                 spSupport.set("child_photo", childObj.has("photo") ? childObj.getString("photo"): "");
+                spSupport.set("child_gender", childObj.getString("gender"));
                 callback.onDataReceiving(null);
             }
         }).execute();
