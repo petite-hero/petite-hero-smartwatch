@@ -13,8 +13,8 @@ import hero.util.Util;
 
 public class EntranceActivity extends Activity {
 
-    private static final String IP_PORT = "http://192.168.1.141:8080";
-    private static final int INTERVAL = 40000;
+    private static final String IP_PORT = "http://192.168.1.35:8080";
+    private static final int INTERVAL = 5000;
     private static final int OUTER_RADIUS = 3000;
 
     SPSupport spSupport;

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import hero.util.SPSupport;
 
 public class WelcomeActivity extends Activity{
 
+    ImageView imvLogo;
     TextView txtWelcome;
     Button btnScanQR;
     ProgressDialog progressDialog;
@@ -38,6 +40,7 @@ public class WelcomeActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        imvLogo = findViewById(R.id.imvLogo);
         txtWelcome = findViewById(R.id.txtWelcome);
         btnScanQR = findViewById(R.id.btnScanQR);
         spSupport = new SPSupport(this);
@@ -69,6 +72,17 @@ public class WelcomeActivity extends Activity{
             }
         });
 
+        // listener to hidden auto login
+        imvLogo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //        final String CHILD_ID = "80";
+                final String CHILD_ID = "3";
+                handleLogin(CHILD_ID);
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -88,12 +102,6 @@ public class WelcomeActivity extends Activity{
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(true);
         integrator.initiateScan();
-    }
-
-    // EVENT HANDLER: SKIP LOGIN
-    public void loginSkip(View view){
-        final String CHILD_ID = "3";
-        handleLogin(CHILD_ID);
     }
 
     @Override

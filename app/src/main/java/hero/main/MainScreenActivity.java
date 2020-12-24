@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -35,6 +34,7 @@ import hero.components.QuestFragment;
 import hero.components.TaskFragment;
 import hero.data.TaskDAO;
 import hero.service.LocationService;
+import hero.util.InfoDialog;
 
 public class MainScreenActivity extends Activity {
 
@@ -270,28 +270,18 @@ public class MainScreenActivity extends Activity {
                 };
                 thread.start();
                 TaskDAO.getInstance(this).delete(currentTaskId);
-                new AlertDialog.Builder(MainScreenActivity.this)
-                        .setMessage("Ảnh đã được gửi đi")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-                                FragmentTransaction ft = MainScreenActivity.this.getFragmentManager().beginTransaction();
-                                ft.detach(fragmentList[0]);
-                                ft.attach(fragmentList[0]);
-                                ft.commit();
-                            }
-                        })
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-                                FragmentTransaction ft = MainScreenActivity.this.getFragmentManager().beginTransaction();
-                                ft.detach(fragmentList[0]);
-                                ft.attach(fragmentList[0]);
-                                ft.commit();
-                            }
-                        })
-                        .show();
+                InfoDialog dialog = new InfoDialog(this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                        FragmentTransaction ft = MainScreenActivity.this.getFragmentManager().beginTransaction();
+                        ft.detach(fragmentList[0]);
+                        ft.attach(fragmentList[0]);
+                        ft.commit();
+                    }
+                });
+                dialog.show();
             }
 
         }

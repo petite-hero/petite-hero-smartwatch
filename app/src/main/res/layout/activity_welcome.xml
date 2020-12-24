@@ -8,11 +8,11 @@
     tools:context=".WelcomeActivity">
 
     <ImageView
+        android:id="@+id/imvLogo"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo"
-        android:onClick="loginSkip"/>
+        android:src="@drawable/logo"/>
     <TextView
         android:id="@+id/txtWelcome"
         android:layout_width="match_parent"
@@ -31,7 +31,5 @@
         android:textColor="@android:color/white"
         android:textSize="16px"
         android:onClick="scanQRCode" />
-<!--    mysterious bug-->
-<!--    android:textAllCaps="false"-->
 
 </LinearLayout>

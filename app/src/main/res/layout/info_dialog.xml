@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_info"
+    android:layout_width="200px"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16px"
+        android:text="Ảnh đã được gửi đi"
+        android:textColor="@color/colorText"
+        android:textSize="16px"/>
+
+    <TextView
+        android:id="@+id/btn_ok"
+        android:layout_width="100px"
+        android:layout_height="30px"
+        android:layout_gravity="center"
+        android:padding="3px"
+        android:layout_marginBottom="10px"
+        android:textAlignment="center"
+        android:background="@color/colorYellow"
+        android:textColor="@color/colorText"
+        android:textSize="16px"
+        android:clickable="true"
+        android:text="OK"/>
+
+</LinearLayout>

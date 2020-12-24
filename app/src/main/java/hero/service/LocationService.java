@@ -108,12 +108,9 @@ public class LocationService extends Service {
 
     private void handleLocationChanged(Location location, String provider){
 
-        Log.d("test", "Location: " + location.getLatitude() + " " + location.getLongitude());
-
         // build json object
         Calendar calendarNow = Calendar.getInstance();
         boolean status = hero.util.Location.isSafe(location.getLatitude(), location.getLongitude(), calendarNow);
-        Log.d("test", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendarNow.getTimeInMillis()) + " " + status);
         JSONObject locationJsonObj = new JSONObject();
         try {
             locationJsonObj.put("child", spSupport.get("child_id"))

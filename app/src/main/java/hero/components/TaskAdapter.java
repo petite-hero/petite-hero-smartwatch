@@ -60,15 +60,15 @@ public class TaskAdapter extends ArrayAdapter<TaskDTO> {
         int iconId = 0;
         if (task.getType().equals("Housework")){
             colorId = R.color.colorTaskCategoryHousehold;
-            iconId = R.drawable.icon_home;
+            iconId = R.drawable.task_housework;
         }
         else if (task.getType().equals("Education")){
             colorId = R.color.colorTaskCategoryHomework;
-            iconId = R.drawable.icon_school;
+            iconId = R.drawable.task_education;
         }
         else if (task.getType().equals("Skills")){
             colorId = R.color.colorTaskCategorySkill;
-            iconId = R.drawable.icon_fan;
+            iconId = R.drawable.task_skills;
         }
 
         // set layout for FRONT FACE CONTAINER

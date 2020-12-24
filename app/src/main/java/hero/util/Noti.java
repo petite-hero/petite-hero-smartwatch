@@ -22,7 +22,7 @@ public class Noti {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "")
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.logo_colored)
                 .setContentTitle("Anh hùng nhỏ")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -41,7 +41,7 @@ public class Noti {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "")
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.logo_colored)
                 .setContentTitle("Anh hùng nhỏ")
                 .setContentText(message)
                 .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000})
