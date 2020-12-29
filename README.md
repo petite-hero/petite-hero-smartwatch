@@ -1,12 +1,29 @@
 # petite-hero-smartwatch
+Smartwatch Application in Petite Hero System
+- Language: Java
+- OS: Android 4.4.2
+- Developed with Android Studio
 
-HOW TO RUN
+![](screenshots/setup.png)
 
-1. Setup virtual device:
+# Functionalities
+1. Retrieve & Report Device Locations
+2. Manage Tasks
+3. Manage Achievements
+4. Show Profile & Badges
+
+# Screenshots
+## 1. Setting Up
+## 2. Task Management
+// screenshots
+## 3. Achievement Management
+## 4. Showing Profile & Badges
+
+# Run this on an Android Virtual Device
+## 1. Setup virtual device:
 - Open AVD Manager => Create Virtual Device
 - Select Phone => 5.4" FWVGA => Clone Device...
 - Set resolution to 240x240
 - Choose a system image
 - Finish
-
-2. Run
+## 2. Run
