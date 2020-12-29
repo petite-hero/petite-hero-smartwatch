@@ -4,7 +4,7 @@ Smartwatch Application in Petite Hero System
 - OS: Android 4.4.2
 - Developed with Android Studio
 
-![](screenshots/setup.png)
+![](screenshots/overview.png)
 
 # Functionalities
 1. Retrieve & Report Device Locations
@@ -14,10 +14,13 @@ Smartwatch Application in Petite Hero System
 
 # Screenshots
 ## 1. Setting Up
+![](screenshots/setup.png)
 ## 2. Task Management
-// screenshots
+![](screenshots/task.png)
 ## 3. Achievement Management
+![](screenshots/achievement.png)
 ## 4. Showing Profile & Badges
+![](screenshots/profile.png)
 
 # Run this on an Android Virtual Device
 ## 1. Setup virtual device:
