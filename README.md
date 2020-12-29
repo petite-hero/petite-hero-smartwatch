@@ -1,10 +1,16 @@
 # petite-hero-smartwatch
-Smartwatch Application in Petite Hero System
+## FPT University Capstone Project
+Smartwatch Application in [Petite Hero System](https://github.com/petite-hero)
 - Language: Java
 - OS: Android 4.4.2
 - Developed with Android Studio
-
 ![](screenshots/overview.png)
+
+# Contributors
+- [Nguyễn Phú Hưng](https://github.com/hulk1999)
+- [Võ Lam Trường](https://github.com/llduong)
+- [Lâm Lệ Dương](https://github.com/llduong)
+- [Âu Đức Tuấn](https://github.com/ibenrique2510)
 
 # Functionalities
 1. Retrieve & Report Device Locations
