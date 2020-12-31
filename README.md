@@ -4,7 +4,7 @@ Children Management and Development Application
 # Smartwatch Application
 - Language: Java
 - OS: Android 4.4.2
-- Developed with Android Studio
+- Developed on Android Studio
 
 ![](screenshots/overview.png)
 
