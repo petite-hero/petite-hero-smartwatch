@@ -15,10 +15,10 @@ Children Management and Development Application
 - [Âu Đức Tuấn](https://github.com/ibenrique2510)
 
 # Functionalities
-1. Retrieve & Report Device Locations
-2. Manage Tasks
-3. Manage Achievements
-4. Show Profile & Badges
+1. Reporting Device Location
+2. Task Management
+3. Achievement Management
+4. Showing Profile & Badges
 
 # Screenshots
 ## 1. Setting Up
