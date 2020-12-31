@@ -1,9 +1,9 @@
 # [PETITE HERO](https://github.com/petite-hero) - FPT University Capstone Project
-# Software Engineering Specialization
-This repo contains the **Smartwatch Application** in the system
+### This repo contains the **Smartwatch Application** in the system
 - Language: Java
 - OS: Android 4.4.2
 - Developed with Android Studio
+
 ![](screenshots/overview.png)
 
 # Contributors
