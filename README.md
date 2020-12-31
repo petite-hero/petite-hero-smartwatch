@@ -1,5 +1,5 @@
-# petite-hero-smartwatch
-## FPT University Capstone Project
+# FPT University Capstone Project - Petite Hero
+## Software Engineering Specialization
 Smartwatch Application in [Petite Hero System](https://github.com/petite-hero)
 - Language: Java
 - OS: Android 4.4.2
@@ -27,12 +27,3 @@ Smartwatch Application in [Petite Hero System](https://github.com/petite-hero)
 ![](screenshots/achievement.png)
 ## 4. Showing Profile & Badges
 ![](screenshots/profile.png)
-
-# Run this on an Android Virtual Device
-## 1. Setup virtual device:
-- Open AVD Manager => Create Virtual Device
-- Select Phone => 5.4" FWVGA => Clone Device...
-- Set resolution to 240x240
-- Choose a system image
-- Finish
-## 2. Run
