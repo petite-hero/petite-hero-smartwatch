@@ -1,4 +1,6 @@
 # [PETITE HERO](https://github.com/petite-hero) - FPT University Capstone Project
+Children Management and Development Application
+
 # Smartwatch Application
 - Language: Java
 - OS: Android 4.4.2
