@@ -10,8 +10,6 @@ The project's product consists of 4 main components:
 
 __*Official TVC*__: https://youtu.be/8nKs7YcEEaE  
 __*Project Demonstration*__: https://youtu.be/i3ZhxKtDCWA  
-<br/>
-[![](screenshots/demo.png)](https://youtu.be/i3ZhxKtDCWA)
 
 # Contributors
 
@@ -25,7 +23,8 @@ __*Graphic Design*__ Specialization:
 - Hàn Lê Khanh
 - Trần Nguyễn An Khang
 
-# Smartwatch Application
+# 
+# Petite Hero - Smartwatch Application
 - Language: Java
 - OS: Android 4.4.2
 - Developed on Android Studio
@@ -47,3 +46,6 @@ __*Graphic Design*__ Specialization:
 ![](screenshots/achievement.png)
 ## 4. Showing Profile & Badges
 ![](screenshots/profile.png)
+
+# Demonstration
+[![](screenshots/demo.png)](https://youtu.be/i3ZhxKtDCWA)
