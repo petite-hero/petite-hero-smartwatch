@@ -8,8 +8,9 @@ The project's product consists of 4 main components:
 - A [Smartwatch Application](https://github.com/petite-hero/petite-hero-smartwatch) for children
 - A [Web Application](https://github.com/petite-hero/petite-hero-web) for administrators
 
-**Official TVC**: https://youtu.be/8nKs7YcEEaE  
-**Project Demonstration**: https://youtu.be/i3ZhxKtDCWA  
+__*Official TVC*__: https://youtu.be/8nKs7YcEEaE  
+__*Project Demonstration*__: https://youtu.be/i3ZhxKtDCWA  
+<br/>
 [![](screenshots/demo.png)](https://youtu.be/i3ZhxKtDCWA)
 
 # Contributors
