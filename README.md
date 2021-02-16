@@ -13,13 +13,13 @@ __*Project Demonstration*__: https://youtu.be/i3ZhxKtDCWA
 
 # Contributors
 
-__*Software Engineering*__ Specialization:
+__*Software Engineering Specialization*__:
 - [Nguyễn Phú Hưng](https://github.com/hulk1999)
 - [Võ Lam Trường](https://github.com/truongvlit)
 - [Lâm Lệ Dương](https://github.com/llduong)
 - [Âu Đức Tuấn](https://github.com/ibenrique2510)
 
-__*Graphic Design*__ Specialization:
+__*Graphic Design Specialization*__:
 - Hàn Lê Khanh
 - Trần Nguyễn An Khang
 
