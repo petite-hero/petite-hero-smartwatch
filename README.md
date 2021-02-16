@@ -1,6 +1,6 @@
 # [PETITE HERO](https://github.com/petite-hero) - FPT University Capstone Project
 
-*Petite Hero - Children Management and Development Application* is an inter-specialization project for graduation thesis in FPT University, realized by Software Engineering and Graphic Design students.
+__*Petite Hero - Children Management and Development Application*__ is an inter-specialization project for FPT University graduation thesis, realized by Software Engineering and Graphic Design students.
 
 The project's product consists of 4 main components:
 - A [Server](https://github.com/petite-hero/petite-hero-api) for requests handling
@@ -8,8 +8,9 @@ The project's product consists of 4 main components:
 - A [Smartwatch Application](https://github.com/petite-hero/petite-hero-smartwatch) for children
 - A [Web Application](https://github.com/petite-hero/petite-hero-web) for administrators
 
-TVC: https://youtu.be/8nKs7YcEEaE
-Project Demonstration: https://youtu.be/i3ZhxKtDCWA
+Official TVC: https://youtu.be/8nKs7YcEEaE  
+Project Demonstration: https://youtu.be/i3ZhxKtDCWA  
+[![](https://img.youtube.com/vi/i3ZhxKtDCWA/maxresdefault.jpg)](https://youtu.be/i3ZhxKtDCWA)
 
 # Smartwatch Application
 - Language: Java
