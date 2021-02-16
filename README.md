@@ -8,9 +8,21 @@ The project's product consists of 4 main components:
 - A [Smartwatch Application](https://github.com/petite-hero/petite-hero-smartwatch) for children
 - A [Web Application](https://github.com/petite-hero/petite-hero-web) for administrators
 
-Official TVC: https://youtu.be/8nKs7YcEEaE  
-Project Demonstration: https://youtu.be/i3ZhxKtDCWA  
-[![](https://img.youtube.com/vi/i3ZhxKtDCWA/maxresdefault.jpg)](https://youtu.be/i3ZhxKtDCWA)
+**Official TVC**: https://youtu.be/8nKs7YcEEaE  
+**Project Demonstration**: https://youtu.be/i3ZhxKtDCWA  
+[![](screenshots/demo.png)](https://youtu.be/i3ZhxKtDCWA)
+
+# Contributors
+
+__*Software Engineering*__ Specialization:
+- [Nguyễn Phú Hưng](https://github.com/hulk1999)
+- [Võ Lam Trường](https://github.com/truongvlit)
+- [Lâm Lệ Dương](https://github.com/llduong)
+- [Âu Đức Tuấn](https://github.com/ibenrique2510)
+
+__*Graphic Design*__ Specialization:
+- Hàn Lê Khanh
+- Trần Nguyễn An Khang
 
 # Smartwatch Application
 - Language: Java
@@ -18,18 +30,6 @@ Project Demonstration: https://youtu.be/i3ZhxKtDCWA
 - Developed on Android Studio
 
 ![](screenshots/overview.png)
-
-# Contributors
-
-Software Engineering Specialization:
-- [Nguyễn Phú Hưng](https://github.com/hulk1999)
-- [Võ Lam Trường](https://github.com/truongvlit)
-- [Lâm Lệ Dương](https://github.com/llduong)
-- [Âu Đức Tuấn](https://github.com/ibenrique2510)
-
-Graphic Design Specialization:
-- Hàn Lê Khanh
-- Trần Nguyễn An Khang
 
 # Functionalities
 1. Reporting Device Location
